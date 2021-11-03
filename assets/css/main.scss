@@ -1,0 +1,36 @@
+@import 'variables/typography.scss';
+@import 'mixins/spacing-mixin.scss';
+
+:root {
+  @include generate-color-variants(--_c-yade-primary, #889671);
+  @include generate-color-variants(--_c-yade-secondary, #b8c4a5);
+  @include assign-color-variants(--c-primary, --_c-yade-primary);
+  @include assign-color-variants(--c-primary-variant, --_c-yade-secondary);
+
+  @include generate-color-variants(--_c-link-primary, #57213c);
+  @include assign-color-variants(--c-secondary, --_c-link-primary);
+
+
+  // BUTTONS
+  --button-text-transform: normal;
+  --button-border-radius: 3px;
+  --button-font-weight: var(--font-weight--medium);
+  --button-font-size: var(--font-size--sm);
+  --button-padding: 0;
+  --button-height: 40px;
+  --button-line-height: 22;
+
+
+
+  // spacings
+  --spacer-sm: 0.313rem; // 5px
+  --spacer-base: 0.625rem; // 10px
+  --spacer-lg: 1.25rem; // 20px
+  --spacer-xl: 2.5rem; // 40px
+  --spacer-2xl: 5rem; // 80px
+  --spacer-3xl: 10rem; // 160px
+}
+
+.sf-button {
+  letter-spacing: 0.23px;
+}

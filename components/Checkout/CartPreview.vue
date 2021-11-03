@@ -25,14 +25,14 @@
         :value="'-' + $n(discount.value, 'currency')"
         class="sf-property--full-width sf-property--small"
       />
-     <SfProperty
+      <SfProperty
         v-if="hasSpecialPrice"
         :value="$n(totals.special, 'currency')"
         class="sf-property--full-width sf-property--small property special-price"
       />
       <SfProperty
-        :name="$t('Shipping')"
         v-if="selectedShippingMethod && selectedShippingMethod.zoneRates"
+        :name="$t('Shipping')"
         :value="$n(getShippingMethodPrice(selectedShippingMethod, totals.total), 'currency')"
         class="sf-property--full-width sf-property--large property"
       />
@@ -49,7 +49,9 @@
         :label="$t('Enter promo code')"
         class="sf-input--filled promo-code__input"
       />
-      <SfButton class="promo-code__button" @click="() => applyCoupon({ couponCode: promoCode })">{{ $t('Apply') }}</SfButton>
+      <SfButton class="promo-code__button" @click="() => applyCoupon({ couponCode: promoCode })">
+        {{ $t('Apply') }}
+      </SfButton>
     </div>
     <div class="highlighted">
       <SfCharacteristic
@@ -73,10 +75,10 @@ import {
   SfCharacteristic,
   SfInput,
   SfCircleIcon
-} from '@storefront-ui/vue';
-import { computed, ref } from '@vue/composition-api';
-import { useCart, useShippingProvider, cartGetters } from '@vue-storefront/commercetools';
-import getShippingMethodPrice from '@/helpers/Checkout/getShippingMethodPrice';
+} from '@storefront-ui/vue'
+import { computed, ref } from '@vue/composition-api'
+import { useCart, useShippingProvider, cartGetters } from '@vue-storefront/commercetools'
+import getShippingMethodPrice from '@/helpers/Checkout/getShippingMethodPrice'
 
 export default {
   name: 'CartPreview',
@@ -90,17 +92,17 @@ export default {
     SfCircleIcon
   },
   setup () {
-    const { cart, removeItem, updateItemQty, applyCoupon } = useCart();
-    const { state } = useShippingProvider();
+    const { cart, removeItem, updateItemQty, applyCoupon } = useCart()
+    const { state } = useShippingProvider()
 
-    const listIsHidden = ref(false);
-    const promoCode = ref('');
-    const showPromoCode = ref(false);
+    const listIsHidden = ref(false)
+    const promoCode = ref('')
+    const showPromoCode = ref(false)
 
-    const products = computed(() => cartGetters.getItems(cart.value));
-    const totalItems = computed(() => cartGetters.getTotalItems(cart.value));
-    const totals = computed(() => cartGetters.getTotals(cart.value));
-    const discounts = computed(() => cartGetters.getDiscounts(cart.value));
+    const products = computed(() => cartGetters.getItems(cart.value))
+    const totalItems = computed(() => cartGetters.getTotalItems(cart.value))
+    const totals = computed(() => cartGetters.getTotals(cart.value))
+    const discounts = computed(() => cartGetters.getDiscounts(cart.value))
 
     return {
       discounts,
@@ -136,9 +138,9 @@ export default {
       selectedShippingMethod: computed(() => state.value && state.value.response && state.value.response.shippingMethod),
       hasSpecialPrice: computed(() => totals.value.special > 0 && totals.value.special < totals.value.subtotal),
       getShippingMethodPrice
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

@@ -2,28 +2,28 @@
   <ValidationObserver v-slot="{ handleSubmit, reset }">
     <form class="form" @submit.prevent="handleSubmit(submitForm(reset))">
       <div class="form__horizontal">
-        <ValidationProvider rules="required|min:2" v-slot="{ errors }" class="form__element">
+        <ValidationProvider v-slot="{ errors }" rules="required|min:2" class="form__element">
           <SfInput
             v-model="form.firstName"
             name="firstName"
             label="First Name"
             required
             :valid="!errors[0]"
-            :errorMessage="errors[0]"
+            :error-message="errors[0]"
           />
         </ValidationProvider>
-        <ValidationProvider rules="required|min:2" v-slot="{ errors }" class="form__element">
+        <ValidationProvider v-slot="{ errors }" rules="required|min:2" class="form__element">
           <SfInput
             v-model="form.lastName"
             name="lastName"
             label="Last Name"
             required
             :valid="!errors[0]"
-            :errorMessage="errors[0]"
+            :error-message="errors[0]"
           />
         </ValidationProvider>
       </div>
-      <ValidationProvider rules="required|email" v-slot="{ errors }" class="form__element">
+      <ValidationProvider v-slot="{ errors }" rules="required|email" class="form__element">
         <SfInput
           v-model="form.email"
           type="email"
@@ -31,19 +31,21 @@
           label="Your e-mail"
           required
           :valid="!errors[0]"
-          :errorMessage="errors[0]"
+          :error-message="errors[0]"
         />
       </ValidationProvider>
-      <SfButton class="form__button">{{ $t('Update personal data') }}</SfButton>
+      <SfButton class="form__button">
+        {{ $t('Update personal data') }}
+      </SfButton>
     </form>
   </ValidationObserver>
 </template>
 
 <script>
-import { ref } from '@vue/composition-api';
-import { ValidationProvider, ValidationObserver } from 'vee-validate';
-import { useUser, userGetters } from '@vue-storefront/commercetools';
-import { SfInput, SfButton } from '@storefront-ui/vue';
+import { ref } from '@vue/composition-api'
+import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import { useUser, userGetters } from '@vue-storefront/commercetools'
+import { SfInput, SfButton } from '@storefront-ui/vue'
 
 export default {
   name: 'ProfileUpdateForm',
@@ -55,38 +57,38 @@ export default {
     ValidationObserver
   },
 
-  setup(_, { emit }) {
-    const { user } = useUser();
+  setup (_, { emit }) {
+    const { user } = useUser()
 
     const resetForm = () => ({
       firstName: userGetters.getFirstName(user.value),
       lastName: userGetters.getLastName(user.value),
       email: userGetters.getEmailAddress(user.value)
-    });
+    })
 
-    const form = ref(resetForm());
+    const form = ref(resetForm())
 
     const submitForm = (resetValidationFn) => {
       return () => {
         const onComplete = () => {
-          form.value = resetForm();
-          resetValidationFn();
-        };
+          form.value = resetForm()
+          resetValidationFn()
+        }
 
         const onError = () => {
           // TODO: Handle error
-        };
+        }
 
-        emit('submit', { form, onComplete, onError });
-      };
-    };
+        emit('submit', { form, onComplete, onError })
+      }
+    }
 
     return {
       form,
       submitForm
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang='scss' scoped>

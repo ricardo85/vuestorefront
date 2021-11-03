@@ -1,14 +1,14 @@
 <template>
   <div>
-    <LazyHydrate when-visible>
+    <!--    <LazyHydrate when-visible>
       <TopBar class="desktop-only" />
-    </LazyHydrate>
+    </LazyHydrate>-->
     <LazyHydrate when-idle>
       <AppHeader />
     </LazyHydrate>
 
     <div id="layout">
-      <nuxt :key="$route.fullPath"/>
+      <nuxt :key="$route.fullPath" />
 
       <LazyHydrate when-visible>
         <BottomNavigation />
@@ -25,15 +25,15 @@
 </template>
 
 <script>
-import AppHeader from '~/components/AppHeader.vue';
-import BottomNavigation from '~/components/BottomNavigation.vue';
-import AppFooter from '~/components/AppFooter.vue';
-import TopBar from '~/components/TopBar.vue';
-import CartSidebar from '~/components/CartSidebar.vue';
-import WishlistSidebar from '~/components/WishlistSidebar.vue';
-import LoginModal from '~/components/LoginModal.vue';
-import LazyHydrate from 'vue-lazy-hydration';
-import Notification from '~/components/Notification';
+import LazyHydrate from 'vue-lazy-hydration'
+import AppHeader from '~/components/AppHeader.vue'
+import BottomNavigation from '~/components/BottomNavigation.vue'
+import AppFooter from '~/components/AppFooter.vue'
+import TopBar from '~/components/TopBar.vue'
+import CartSidebar from '~/components/CartSidebar.vue'
+import WishlistSidebar from '~/components/WishlistSidebar.vue'
+import LoginModal from '~/components/LoginModal.vue'
+import Notification from '~/components/Notification'
 
 export default {
   name: 'DefaultLayout',
@@ -49,11 +49,12 @@ export default {
     LoginModal,
     Notification
   }
-};
+}
 </script>
 
 <style lang="scss">
 @import "~@storefront-ui/vue/styles";
+@import "/assets/css/main.scss";
 
 #layout {
   box-sizing: border-box;
@@ -80,6 +81,7 @@ body {
   color: var(--c-text);
   font-size: var(--font-size--base);
   font-family: var(--font-family--primary);
+  line-height: 1.625rem;
   margin: 0;
   padding: 0;
 }
@@ -93,7 +95,7 @@ a {
 h1 {
   font-family: var(--font-family--secondary);
   font-size: var(--h1-font-size);
-  line-height: 1.6;
+  line-height: var(--line-height-xxxl);
   margin: 0;
 }
 h2 {

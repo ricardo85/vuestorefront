@@ -11,6 +11,9 @@
           :image="hero.image"
           :class="hero.className"
         />
+        <template #prev>
+          prev
+        </template>
       </SfHero>
     </LazyHydrate>
 
@@ -66,7 +69,11 @@
               :link="localePath({ name: 'home' })"
               class="carousel__item__product"
               @click:wishlist="toggleWishlist(i)"
-            />
+            >
+              <template #add-to-cart>
+                test
+              </template>
+            </SfProductCard>
           </SfCarouselItem>
         </SfCarousel>
     </LazyHydrate>
@@ -262,6 +269,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 #home {
   box-sizing: border-box;
   padding: 0 var(--spacer-sm);

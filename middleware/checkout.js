@@ -1,3 +1,4 @@
+// hooked globally via middleware.js in .nuxt folder - that will run before every page load
 const canEnterPayment = cart => cart.shippingInfo && cart.shippingAddress;
 
 const canEnterReview = cart => Boolean(cart.billingAddress);

@@ -12,119 +12,119 @@
       "
     >
       <UserShippingAddresses
-        v-e2e="'shipping-addresses'"
         v-if="isAuthenticated && hasSavedShippingAddress"
         v-model="setAsDefault"
-        :currentAddressId="currentAddressId || NOT_SELECTED_ADDRESS"
+        v-e2e="'shipping-addresses'"
+        :current-address-id="currentAddressId || NOT_SELECTED_ADDRESS"
         @setCurrentAddress="handleSetCurrentAddress"
       />
-      <div class="form" v-if="canAddNewAddress">
+      <div v-if="canAddNewAddress" class="form">
         <ValidationProvider
+          v-slot="{ errors }"
           name="firstName"
           rules="required|min:2"
-          v-slot="{ errors }"
           slim
         >
           <SfInput
             v-e2e="'shipping-firstName'"
             :value="shippingDetails.firstName"
-            @input="firstName => changeShippingDetails('firstName', firstName)"
             :label="$t('First name')"
             name="firstName"
             class="form__element form__element--half"
             required
             :valid="!errors[0]"
-            :errorMessage="errors[0]"
+            :error-message="errors[0]"
+            @input="firstName => changeShippingDetails('firstName', firstName)"
           />
         </ValidationProvider>
         <ValidationProvider
+          v-slot="{ errors }"
           name="lastName"
           rules="required|min:2"
-          v-slot="{ errors }"
           slim
         >
           <SfInput
             v-e2e="'shipping-lastName'"
             :value="shippingDetails.lastName"
-            @input="lastName => changeShippingDetails('lastName', lastName)"
             :label="$t('Last name')"
             name="lastName"
             class="form__element form__element--half form__element--half-even"
             required
             :valid="!errors[0]"
-            :errorMessage="errors[0]"
+            :error-message="errors[0]"
+            @input="lastName => changeShippingDetails('lastName', lastName)"
           />
         </ValidationProvider>
         <ValidationProvider
+          v-slot="{ errors }"
           name="streetName"
           rules="required"
-          v-slot="{ errors }"
           slim
         >
           <SfInput
             v-e2e="'shipping-streetName'"
             :value="shippingDetails.streetName"
-            @input="streetName => changeShippingDetails('streetName', streetName)"
             :label="$t('Street name')"
             name="streetName"
             class="form__element form__element--half"
             required
             :valid="!errors[0]"
-            :errorMessage="errors[0]"
+            :error-message="errors[0]"
+            @input="streetName => changeShippingDetails('streetName', streetName)"
           />
         </ValidationProvider>
         <ValidationProvider
+          v-slot="{ errors }"
           name="apartment"
           rules="required"
-          v-slot="{ errors }"
           slim
         >
           <SfInput
             v-e2e="'shipping-apartment'"
             :value="shippingDetails.apartment"
-            @input="apartment => changeShippingDetails('apartment', apartment)"
             :label="$t('House/Apartment number')"
             name="apartment"
             class="form__element form__element--half form__element--half-even"
             required
             :valid="!errors[0]"
-            :errorMessage="errors[0]"
+            :error-message="errors[0]"
+            @input="apartment => changeShippingDetails('apartment', apartment)"
           />
         </ValidationProvider>
         <ValidationProvider
+          v-slot="{ errors }"
           name="city"
           rules="required"
-          v-slot="{ errors }"
           slim
         >
           <SfInput
             v-e2e="'shipping-city'"
             :value="shippingDetails.city"
-            @input="city => changeShippingDetails('city', city)"
             :label="$t('City')"
             name="city"
             class="form__element form__element--half"
             required
             :valid="!errors[0]"
-            :errorMessage="errors[0]"
+            :error-message="errors[0]"
+            @input="city => changeShippingDetails('city', city)"
           />
         </ValidationProvider>
         <ValidationProvider
+          v-slot="{ errors }"
           name="country"
           rules="required|min:2"
-          v-slot="{ errors }"
           slim
         >
           <SfSelect
             v-e2e="'shipping-country'"
             :value="shippingDetails.country"
-            @input="country => changeShippingDetails('country', country)"
             :label="$t('Country')"
             name="country"
             class="form__element form__element--half form__select sf-select--underlined form__element--half-even "
             required
             :valid="!errors[0]"
-            :errorMessage="errors[0]"
+            :error-message="errors[0]"
+            @input="country => changeShippingDetails('country', country)"
           >
             <SfSelectOption
               v-for="countryOption in countries"
@@ -136,22 +136,22 @@
           </SfSelect>
         </ValidationProvider>
         <ValidationProvider
+          v-slot="{ errors }"
           name="state"
           :rules="!statesInSelectedCountry ? null : 'required|min:2'"
-          v-slot="{ errors }"
           slim
         >
           <SfSelect
             v-e2e="'shipping-state'"
             :value="shippingDetails.state"
-            @input="state => changeShippingDetails('state', state)"
             :label="$t('State/Province')"
             name="state"
             class="form__element form__element--half form__select sf-select--underlined"
             required
             :valid="!errors[0]"
-            :errorMessage="errors[0]"
+            :error-message="errors[0]"
             :disabled="!statesInSelectedCountry"
+            @input="state => changeShippingDetails('state', state)"
           >
             <SfSelectOption
               v-for="state in statesInSelectedCountry"
@@ -163,45 +163,45 @@
           </SfSelect>
         </ValidationProvider>
         <ValidationProvider
+          v-slot="{ errors }"
           name="zipCode"
           rules="required|min:2"
-          v-slot="{ errors }"
           slim
         >
           <SfInput
             v-e2e="'shipping-zipcode'"
             :value="shippingDetails.postalCode"
-            @input="postalCode => changeShippingDetails('postalCode', postalCode)"
             :label="$t('Zip-code')"
             name="zipCode"
             class="form__element form__element--half form__element--half-even"
             required
             :valid="!errors[0]"
-            :errorMessage="errors[0]"
+            :error-message="errors[0]"
+            @input="postalCode => changeShippingDetails('postalCode', postalCode)"
           />
         </ValidationProvider>
         <ValidationProvider
+          v-slot="{ errors }"
           name="phone"
           rules="required|phone"
-          v-slot="{ errors }"
           slim
         >
           <SfInput
             v-e2e="'shipping-phone'"
             :value="shippingDetails.phone"
-            @input="phone => changeShippingDetails('phone', phone)"
             :label="$t('Phone number')"
             name="phone"
             class="form__element form__element--half"
             required
             :valid="!errors[0]"
-            :errorMessage="errors[0]"
+            :error-message="errors[0]"
+            @input="phone => changeShippingDetails('phone', phone)"
           />
         </ValidationProvider>
       </div>
       <SfButton
-        v-e2e="'shipping-add-new-address'"
         v-if="!canAddNewAddress"
+        v-e2e="'shipping-add-new-address'"
         class="color-light form__action-button form__action-button--add-address"
         type="button"
         @click.native="handleAddNewAddressBtnClick"
@@ -211,11 +211,11 @@
       <div class="form">
         <div class="form__action">
           <SfButton
+            v-if="!(isShippingDetailsStepCompleted && !dirty)"
             v-e2e="'select-shipping'"
             class="form__action-button"
             type="submit"
             :disabled="!canMoveForward"
-            v-if="!(isShippingDetailsStepCompleted && !dirty)"
           >
             {{ $t('Select shipping method') }}
           </SfButton>
@@ -228,8 +228,8 @@
             v-e2e="'continue-to-billing'"
             class="form__action-button"
             type="button"
-            @click.native="$router.push(localePath({ name: 'billing' }))"
             :disabled="!isShippingMethodStepCompleted || loadingShippingProvider"
+            @click.native="$router.push(localePath({ name: 'billing' }))"
           >
             {{ $t('Continue to billing') }}
           </SfButton>
@@ -245,29 +245,28 @@ import {
   SfInput,
   SfButton,
   SfSelect
-} from '@storefront-ui/vue';
-import { useShippingProvider, useUserShipping, userShippingGetters, useUser, useShipping } from '@vue-storefront/commercetools';
-import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
-import { required, min, digits } from 'vee-validate/dist/rules';
-import { useVSFContext } from '@vue-storefront/core';
-import { ref, watch, computed, onMounted } from '@vue/composition-api';
-import { onSSR } from '@vue-storefront/core';
-import '@/helpers/validators/phone';
+} from '@storefront-ui/vue'
+import { useShippingProvider, useUserShipping, userShippingGetters, useUser, useShipping } from '@vue-storefront/commercetools'
+import { ValidationProvider, ValidationObserver, extend } from 'vee-validate'
+import { required, min, digits } from 'vee-validate/dist/rules'
+import { useVSFContext, onSSR } from '@vue-storefront/core'
+import { ref, watch, computed, onMounted } from '@vue/composition-api'
+import '@/helpers/validators/phone'
 
-const NOT_SELECTED_ADDRESS = '';
+const NOT_SELECTED_ADDRESS = ''
 
 extend('required', {
   ...required,
   message: 'This field is required'
-});
+})
 extend('min', {
   ...min,
   message: 'The field should have at least {length} characters'
-});
+})
 extend('digits', {
   ...digits,
   message: 'Please provide a valid phone number'
-});
+})
 
 export default {
   name: 'Shipping',
@@ -282,117 +281,117 @@ export default {
     VsfShippingProvider: () => import('@/components/Checkout/VsfShippingProvider')
   },
   setup () {
-    const { $ct: { config } } = useVSFContext();
-    const { shipping: address, loading, load, save } = useShipping();
-    const { isAuthenticated } = useUser();
-    const { shipping: userShipping, load: loadUserShipping, setDefaultAddress } = useUserShipping();
+    const { $ct: { config } } = useVSFContext()
+    const { shipping: address, loading, load, save } = useShipping()
+    const { isAuthenticated } = useUser()
+    const { shipping: userShipping, load: loadUserShipping, setDefaultAddress } = useUserShipping()
 
-    const shippingDetails = ref(address.value || {});
-    const currentAddressId = ref(NOT_SELECTED_ADDRESS);
+    const shippingDetails = ref(address.value || {})
+    const currentAddressId = ref(NOT_SELECTED_ADDRESS)
 
-    const setAsDefault = ref(false);
-    const canAddNewAddress = ref(true);
+    const setAsDefault = ref(false)
+    const canAddNewAddress = ref(true)
 
-    const isShippingDetailsStepCompleted = ref(false);
+    const isShippingDetailsStepCompleted = ref(false)
 
-    const canMoveForward = computed(() => !loading.value && shippingDetails.value && Object.keys(shippingDetails.value).length);
+    const canMoveForward = computed(() => !loading.value && shippingDetails.value && Object.keys(shippingDetails.value).length)
 
     const {
       state,
       loading: loadingShippingProvider
-    } = useShippingProvider();
+    } = useShippingProvider()
 
     const hasSavedShippingAddress = computed(() => {
       if (!isAuthenticated.value || !userShipping.value) {
-        return false;
+        return false
       }
-      const addresses = userShippingGetters.getAddresses(userShipping.value);
-      return Boolean(addresses?.length);
-    });
+      const addresses = userShippingGetters.getAddresses(userShipping.value)
+      return Boolean(addresses?.length)
+    })
 
     const statesInSelectedCountry = computed(() => {
       if (!shippingDetails.value.country) {
-        return null;
+        return null
       }
-      const selectedCountry = config.countries.find(country => country.name === shippingDetails.value.country);
-      return selectedCountry && selectedCountry.states;
-    });
+      const selectedCountry = config.countries.find(country => country.name === shippingDetails.value.country)
+      return selectedCountry && selectedCountry.states
+    })
 
-    const handleAddressSubmit = (reset) => async () => {
-      const addressId = currentAddressId.value;
-      await save({ shippingDetails: shippingDetails.value });
+    const handleAddressSubmit = reset => async () => {
+      const addressId = currentAddressId.value
+      await save({ shippingDetails: shippingDetails.value })
       if (addressId !== NOT_SELECTED_ADDRESS && setAsDefault.value) {
-        const chosenAddress = userShippingGetters.getAddresses(userShipping.value, { id: addressId });
+        const chosenAddress = userShippingGetters.getAddresses(userShipping.value, { id: addressId })
         if (chosenAddress && chosenAddress.length) {
-          await setDefaultAddress({ address: chosenAddress[0] });
+          await setDefaultAddress({ address: chosenAddress[0] })
         }
       }
-      reset();
-      isShippingDetailsStepCompleted.value = true;
-    };
+      reset()
+      isShippingDetailsStepCompleted.value = true
+    }
 
     const handleAddNewAddressBtnClick = () => {
-      currentAddressId.value = NOT_SELECTED_ADDRESS;
-      canAddNewAddress.value = true;
-    };
+      currentAddressId.value = NOT_SELECTED_ADDRESS
+      canAddNewAddress.value = true
+    }
 
-    const handleSetCurrentAddress = address => {
-      shippingDetails.value = {...address};
-      currentAddressId.value = address.id;
-      canAddNewAddress.value = false;
-      isShippingDetailsStepCompleted.value = false;
-    };
+    const handleSetCurrentAddress = (address) => {
+      shippingDetails.value = { ...address }
+      currentAddressId.value = address.id
+      canAddNewAddress.value = false
+      isShippingDetailsStepCompleted.value = false
+    }
 
     const changeShippingDetails = (field, value) => {
       shippingDetails.value = {
         ...shippingDetails.value,
         [field]: value
-      };
-      isShippingDetailsStepCompleted.value = false;
-      currentAddressId.value = NOT_SELECTED_ADDRESS;
-    };
+      }
+      isShippingDetailsStepCompleted.value = false
+      currentAddressId.value = NOT_SELECTED_ADDRESS
+    }
 
     const selectDefaultAddress = () => {
-      const defaultAddress = userShippingGetters.getAddresses(userShipping.value, { isDefault: true });
+      const defaultAddress = userShippingGetters.getAddresses(userShipping.value, { isDefault: true })
       if (defaultAddress && defaultAddress.length) {
-        handleSetCurrentAddress(defaultAddress[0]);
+        handleSetCurrentAddress(defaultAddress[0])
       }
-    };
+    }
 
     // Update local state if we have new address' response from the backend
-    watch(address, addr => {
-      shippingDetails.value = addr || {};
-    });
+    watch(address, (addr) => {
+      shippingDetails.value = addr || {}
+    })
 
-    watch(statesInSelectedCountry, statesInSelectedCountry => {
-      const countryHasStates = statesInSelectedCountry && statesInSelectedCountry.length;
+    watch(statesInSelectedCountry, (statesInSelectedCountry) => {
+      const countryHasStates = statesInSelectedCountry && statesInSelectedCountry.length
       if (!countryHasStates && shippingDetails.value.state) {
-        shippingDetails.value.state = null;
+        shippingDetails.value.state = null
       }
-    });
+    })
 
     onSSR(async () => {
-      await load();
+      await load()
       if (isAuthenticated.value) {
-        await loadUserShipping();
+        await loadUserShipping()
       }
-    });
+    })
 
     onMounted(async () => {
       if (!userShipping.value?.addresses && isAuthenticated.value) {
-        await loadUserShipping();
+        await loadUserShipping()
       }
-      const shippingAddresses = userShippingGetters.getAddresses(userShipping.value);
+      const shippingAddresses = userShippingGetters.getAddresses(userShipping.value)
       if (!shippingAddresses || !shippingAddresses.length) {
-        return;
+        return
       }
-      const hasEmptyShippingDetails = !shippingDetails.value || Object.keys(shippingDetails.value).length === 0;
+      const hasEmptyShippingDetails = !shippingDetails.value || Object.keys(shippingDetails.value).length === 0
       if (hasEmptyShippingDetails) {
-        selectDefaultAddress();
-        return;
+        selectDefaultAddress()
+        return
       }
-      canAddNewAddress.value = false;
-    });
+      canAddNewAddress.value = false
+    })
 
     return {
       NOT_SELECTED_ADDRESS,
@@ -420,9 +419,9 @@ export default {
 
       isShippingMethodStepCompleted: computed(() => state.value && state.value._status),
       loadingShippingProvider
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

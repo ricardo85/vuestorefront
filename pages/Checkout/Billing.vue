@@ -14,124 +14,124 @@
       <UserBillingAddresses
         v-if="isAuthenticated && hasSavedBillingAddress"
         v-model="setAsDefault"
-        :currentAddressId="currentAddressId || NOT_SELECTED_ADDRESS"
+        :current-address-id="currentAddressId || NOT_SELECTED_ADDRESS"
         @setCurrentAddress="handleSetCurrentAddress"
       />
       <SfCheckbox
         v-e2e="'copy-address'"
         :selected="sameAsShipping"
-        @change="handleCheckSameAddress"
         :label="$t('Copy address data from shipping')"
         name="copyShippingAddress"
         class="form__element"
+        @change="handleCheckSameAddress"
       />
-      <div class="form" v-if="canAddNewAddress">
+      <div v-if="canAddNewAddress" class="form">
         <ValidationProvider
+          v-slot="{ errors }"
           name="firstName"
           rules="required|min:2"
-          v-slot="{ errors }"
           slim
         >
           <SfInput
             v-e2e="'billing-firstName'"
             :value="billingDetails.firstName"
-            @input="firstName => changeBillingDetails('firstName', firstName)"
             :label="$t('First name')"
             name="firstName"
             class="form__element form__element--half"
             required
             :valid="!errors[0]"
-            :errorMessage="errors[0]"
+            :error-message="errors[0]"
+            @input="firstName => changeBillingDetails('firstName', firstName)"
           />
         </ValidationProvider>
         <ValidationProvider
+          v-slot="{ errors }"
           name="lastName"
           rules="required|min:2"
-          v-slot="{ errors }"
           slim
         >
           <SfInput
             v-e2e="'billing-lastName'"
             :value="billingDetails.lastName"
-            @input="lastName => changeBillingDetails('lastName', lastName)"
             :label="$t('Last name')"
             name="lastName"
             class="form__element form__element--half form__element--half-even"
             required
             :valid="!errors[0]"
-            :errorMessage="errors[0]"
+            :error-message="errors[0]"
+            @input="lastName => changeBillingDetails('lastName', lastName)"
           />
         </ValidationProvider>
         <ValidationProvider
+          v-slot="{ errors }"
           name="streetName"
           rules="required"
-          v-slot="{ errors }"
           slim
         >
           <SfInput
             v-e2e="'billing-streetName'"
             :value="billingDetails.streetName"
-            @input="streetName => changeBillingDetails('streetName', streetName)"
             :label="$t('Street name')"
             name="streetName"
             class="form__element form__element--half"
             required
             :valid="!errors[0]"
-            :errorMessage="errors[0]"
+            :error-message="errors[0]"
+            @input="streetName => changeBillingDetails('streetName', streetName)"
           />
         </ValidationProvider>
         <ValidationProvider
+          v-slot="{ errors }"
           name="apartment"
           rules="required"
-          v-slot="{ errors }"
           slim
         >
           <SfInput
             v-e2e="'billing-apartment'"
             :value="billingDetails.apartment"
-            @input="apartment => changeBillingDetails('apartment', apartment)"
             :label="$t('House/Apartment number')"
             name="apartment"
             class="form__element form__element--half form__element--half-even"
             required
             :valid="!errors[0]"
-            :errorMessage="errors[0]"
+            :error-message="errors[0]"
+            @input="apartment => changeBillingDetails('apartment', apartment)"
           />
         </ValidationProvider>
         <ValidationProvider
+          v-slot="{ errors }"
           name="city"
           rules="required"
-          v-slot="{ errors }"
           slim
         >
           <SfInput
             v-e2e="'billing-city'"
             :value="billingDetails.city"
-            @input="city => changeBillingDetails('city', city)"
             :label="$t('City')"
             name="city"
             class="form__element form__element--half"
             required
             :valid="!errors[0]"
-            :errorMessage="errors[0]"
+            :error-message="errors[0]"
+            @input="city => changeBillingDetails('city', city)"
           />
         </ValidationProvider>
         <ValidationProvider
+          v-slot="{ errors }"
           name="country"
           rules="required|min:2"
-          v-slot="{ errors }"
           slim
         >
           <SfSelect
             v-e2e="'billing-country'"
             :value="billingDetails.country"
-            @input="country => changeBillingDetails('country', country)"
             :label="$t('Country')"
             name="country"
             class="form__element form__element--half form__element--half-even form__select sf-select--underlined"
             required
             :valid="!errors[0]"
-            :errorMessage="errors[0]"
+            :error-message="errors[0]"
+            @input="country => changeBillingDetails('country', country)"
           >
             <SfSelectOption
               v-for="countryOption in countries"
@@ -143,22 +143,22 @@
           </SfSelect>
         </ValidationProvider>
         <ValidationProvider
+          v-slot="{ errors }"
           name="state"
           :rules="!statesInSelectedCountry ? null : 'required|min:2'"
-          v-slot="{ errors }"
           slim
         >
           <SfSelect
             v-e2e="'billing-state'"
             :value="billingDetails.state"
-            @input="state => changeBillingDetails('state', state)"
             :label="$t('State/Province')"
             name="state"
             class="form__element form__element--half form__select sf-select--underlined"
             required
             :valid="!errors[0]"
-            :errorMessage="errors[0]"
+            :error-message="errors[0]"
             :disabled="!statesInSelectedCountry"
+            @input="state => changeBillingDetails('state', state)"
           >
             <SfSelectOption
               v-for="state in statesInSelectedCountry"
@@ -170,45 +170,45 @@
           </SfSelect>
         </ValidationProvider>
         <ValidationProvider
+          v-slot="{ errors }"
           name="zipCode"
           rules="required|min:2"
-          v-slot="{ errors }"
           slim
         >
           <SfInput
             v-e2e="'billing-zipcode'"
             :value="billingDetails.postalCode"
-            @input="postalCode => changeBillingDetails('postalCode', postalCode)"
             :label="$t('Zip-code')"
             name="zipCode"
             class="form__element form__element--half form__element--half-even"
             required
             :valid="!errors[0]"
-            :errorMessage="errors[0]"
+            :error-message="errors[0]"
+            @input="postalCode => changeBillingDetails('postalCode', postalCode)"
           />
         </ValidationProvider>
         <ValidationProvider
+          v-slot="{ errors }"
           name="phone"
           rules="required|phone"
-          v-slot="{ errors }"
           slim
         >
           <SfInput
             v-e2e="'billing-phone'"
             :value="billingDetails.phone"
-            @input="phone => changeBillingDetails('phone', phone)"
             :label="$t('Phone number')"
             name="phone"
             class="form__element form__element--half"
             required
             :valid="!errors[0]"
-            :errorMessage="errors[0]"
+            :error-message="errors[0]"
+            @input="phone => changeBillingDetails('phone', phone)"
           />
         </ValidationProvider>
       </div>
       <SfButton
-        v-e2e="'billing-add-new-address'"
         v-if="!canAddNewAddress"
+        v-e2e="'billing-add-new-address'"
         class="color-light form__action-button form__action-button--add-address"
         type="button"
         @click.native="handleAddNewAddressBtnClick"
@@ -228,7 +228,9 @@
           <nuxt-link
             :to="localePath({ name: 'shipping' })"
             class="sf-button sf-button--underlined form__back-button smartphone-only"
-            >Go back</nuxt-link>
+          >
+            Go back
+          </nuxt-link>
         </div>
       </div>
     </form>
@@ -243,29 +245,28 @@ import {
   SfSelect,
   SfRadio,
   SfCheckbox
-} from '@storefront-ui/vue';
-import { useUserBilling, userBillingGetters, useUser, useBilling, useShipping } from '@vue-storefront/commercetools';
-import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
-import { required, min, digits } from 'vee-validate/dist/rules';
-import { useVSFContext } from '@vue-storefront/core';
-import { ref, watch, computed, onMounted } from '@vue/composition-api';
-import { onSSR } from '@vue-storefront/core';
-import '@/helpers/validators/phone';
+} from '@storefront-ui/vue'
+import { useUserBilling, userBillingGetters, useUser, useBilling, useShipping } from '@vue-storefront/commercetools'
+import { ValidationProvider, ValidationObserver, extend } from 'vee-validate'
+import { required, min, digits } from 'vee-validate/dist/rules'
+import { useVSFContext, onSSR } from '@vue-storefront/core'
+import { ref, watch, computed, onMounted } from '@vue/composition-api'
+import '@/helpers/validators/phone'
 
-const NOT_SELECTED_ADDRESS = '';
+const NOT_SELECTED_ADDRESS = ''
 
 extend('required', {
   ...required,
   message: 'This field is required'
-});
+})
 extend('min', {
   ...min,
   message: 'The field should have at least {length} characters'
-});
+})
 extend('digits', {
   ...digits,
   message: 'Please provide a valid phone number'
-});
+})
 
 export default {
   name: 'Billing',
@@ -280,127 +281,127 @@ export default {
     ValidationObserver,
     UserBillingAddresses: () => import('@/components/Checkout/UserBillingAddresses')
   },
-  setup(_, context) {
-    const { $ct: { config } } = useVSFContext();
-    const { shipping: shippingDetails, load: loadShipping } = useShipping();
-    const { billing: address, loading, load, save } = useBilling();
-    const { isAuthenticated } = useUser();
-    const { billing: userBilling, load: loadUserBilling, setDefaultAddress } = useUserBilling();
-    const billingDetails = ref(address.value || {});
+  setup (_, context) {
+    const { $ct: { config } } = useVSFContext()
+    const { shipping: shippingDetails, load: loadShipping } = useShipping()
+    const { billing: address, loading, load, save } = useBilling()
+    const { isAuthenticated } = useUser()
+    const { billing: userBilling, load: loadUserBilling, setDefaultAddress } = useUserBilling()
+    const billingDetails = ref(address.value || {})
 
-    const currentAddressId = ref(NOT_SELECTED_ADDRESS);
-    const setAsDefault = ref(false);
-    const canAddNewAddress = ref(true);
-    const sameAsShipping = ref(false);
-    let oldBilling = null;
+    const currentAddressId = ref(NOT_SELECTED_ADDRESS)
+    const setAsDefault = ref(false)
+    const canAddNewAddress = ref(true)
+    const sameAsShipping = ref(false)
+    let oldBilling = null
 
-    const canMoveForward = computed(() => !loading.value && billingDetails.value && Object.keys(billingDetails.value).length);
+    const canMoveForward = computed(() => !loading.value && billingDetails.value && Object.keys(billingDetails.value).length)
 
     const statesInSelectedCountry = computed(() => {
       if (!billingDetails.value.country) {
-        return null;
+        return null
       }
-      const selectedCountry = config.countries.find(country => country.name === billingDetails.value.country);
-      return selectedCountry && selectedCountry.states;
-    });
+      const selectedCountry = config.countries.find(country => country.name === billingDetails.value.country)
+      return selectedCountry && selectedCountry.states
+    })
 
     const hasSavedBillingAddress = computed(() => {
       if (!isAuthenticated.value || !userBilling.value) {
-        return false;
+        return false
       }
-      const addresses = userBillingGetters.getAddresses(userBilling.value);
-      return Boolean(addresses?.length);
-    });
+      const addresses = userBillingGetters.getAddresses(userBilling.value)
+      return Boolean(addresses?.length)
+    })
 
     const handleCheckSameAddress = async () => {
-      sameAsShipping.value = !sameAsShipping.value;
+      sameAsShipping.value = !sameAsShipping.value
       if (sameAsShipping.value) {
         if (!shippingDetails.value) {
-          await loadShipping();
+          await loadShipping()
         }
-        oldBilling = {...billingDetails.value};
-        billingDetails.value = {...shippingDetails.value};
-        currentAddressId.value = NOT_SELECTED_ADDRESS;
-        setAsDefault.value = false;
-        return;
+        oldBilling = { ...billingDetails.value }
+        billingDetails.value = { ...shippingDetails.value }
+        currentAddressId.value = NOT_SELECTED_ADDRESS
+        setAsDefault.value = false
+        return
       }
-      billingDetails.value = oldBilling;
-    };
+      billingDetails.value = oldBilling
+    }
 
-    const handleAddressSubmit = (reset) => async () => {
-      const addressId = currentAddressId.value;
-      await save({ billingDetails: billingDetails.value });
+    const handleAddressSubmit = reset => async () => {
+      const addressId = currentAddressId.value
+      await save({ billingDetails: billingDetails.value })
       if (addressId !== NOT_SELECTED_ADDRESS && setAsDefault.value) {
-        const chosenAddress = userBillingGetters.getAddresses(userBilling.value, { id: addressId });
+        const chosenAddress = userBillingGetters.getAddresses(userBilling.value, { id: addressId })
         if (chosenAddress && chosenAddress.length) {
-          await setDefaultAddress({ address: chosenAddress[0] });
+          await setDefaultAddress({ address: chosenAddress[0] })
         }
       }
-      reset();
-      context.root.$router.push(context.root.localePath({ name: 'payment' }));
-    };
+      reset()
+      context.root.$router.push(context.root.localePath({ name: 'payment' }))
+    }
 
     const handleAddNewAddressBtnClick = () => {
-      currentAddressId.value = NOT_SELECTED_ADDRESS;
-      canAddNewAddress.value = true;
-    };
+      currentAddressId.value = NOT_SELECTED_ADDRESS
+      canAddNewAddress.value = true
+    }
 
-    const handleSetCurrentAddress = address => {
-      billingDetails.value = {...address};
-      currentAddressId.value = address.id;
-      canAddNewAddress.value = false;
-      sameAsShipping.value = false;
-    };
+    const handleSetCurrentAddress = (address) => {
+      billingDetails.value = { ...address }
+      currentAddressId.value = address.id
+      canAddNewAddress.value = false
+      sameAsShipping.value = false
+    }
 
     const changeBillingDetails = (field, value) => {
       billingDetails.value = {
         ...billingDetails.value,
         [field]: value
-      };
-      currentAddressId.value = NOT_SELECTED_ADDRESS;
-    };
+      }
+      currentAddressId.value = NOT_SELECTED_ADDRESS
+    }
 
     const selectDefaultAddress = () => {
-      const defaultAddress = userBillingGetters.getAddresses(userBilling.value, { isDefault: true });
+      const defaultAddress = userBillingGetters.getAddresses(userBilling.value, { isDefault: true })
       if (defaultAddress && defaultAddress.length) {
-        handleSetCurrentAddress(defaultAddress[0]);
+        handleSetCurrentAddress(defaultAddress[0])
       }
-    };
+    }
 
     // Update local state if we have new address' response from the backend
-    watch(address, addr => {
-      billingDetails.value = addr || {};
-    });
+    watch(address, (addr) => {
+      billingDetails.value = addr || {}
+    })
 
-    watch(statesInSelectedCountry, statesInSelectedCountry => {
-      const countryHasStates = statesInSelectedCountry && statesInSelectedCountry.length;
+    watch(statesInSelectedCountry, (statesInSelectedCountry) => {
+      const countryHasStates = statesInSelectedCountry && statesInSelectedCountry.length
       if (!countryHasStates && billingDetails.value.state) {
-        billingDetails.value.state = null;
+        billingDetails.value.state = null
       }
-    });
+    })
 
     onSSR(async () => {
-      await load();
+      await load()
       if (isAuthenticated.value) {
-        await loadUserBilling();
+        await loadUserBilling()
       }
-    });
+    })
 
     onMounted(async () => {
       if (!userBilling.value?.addresses && isAuthenticated.value) {
-        await loadUserBilling();
+        await loadUserBilling()
       }
-      const billingAddresses = userBillingGetters.getAddresses(userBilling.value);
+      const billingAddresses = userBillingGetters.getAddresses(userBilling.value)
       if (!billingAddresses || !billingAddresses.length) {
-        return;
+        return
       }
-      const hasEmptyBillingDetails = !billingDetails.value || Object.keys(billingDetails.value).length === 0;
+      const hasEmptyBillingDetails = !billingDetails.value || Object.keys(billingDetails.value).length === 0
       if (hasEmptyBillingDetails) {
-        selectDefaultAddress();
-        return;
+        selectDefaultAddress()
+        return
       }
-      canAddNewAddress.value = false;
-    });
+      canAddNewAddress.value = false
+    })
 
     return {
       NOT_SELECTED_ADDRESS,
@@ -421,9 +422,9 @@ export default {
       statesInSelectedCountry,
       loading,
       canMoveForward
-    };
+    }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .title {

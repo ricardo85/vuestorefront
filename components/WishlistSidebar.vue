@@ -4,20 +4,22 @@
       :visible="isWishlistSidebarOpen"
       :button="false"
       title="My Wishlist"
-      @close="toggleWishlistSidebar"
       class="sidebar sf-sidebar--right"
+      @close="toggleWishlistSidebar"
     >
       <template #title>
         <div class="heading__wrapper">
-          <SfHeading :level="3" title="My wishlist" class="sf-heading--left"/>
+          <SfHeading :level="3" title="My wishlist" class="sf-heading--left" />
           <SfButton class="heading__close-button sf-button--pure" aria-label="Wishlist sidebar close button" @click="toggleWishlistSidebar">
-            <SfIcon icon="cross" size="14px" color="gray-primary"/>
+            <SfIcon icon="cross" size="14px" color="gray-primary" />
           </SfButton>
         </div>
       </template>
       <transition name="fade" mode="out-in">
-        <div v-if="totalItems" class="my-wishlist" key="my-wishlist">
-          <div class="my-wishlist__total-items">Total items: <strong>{{ totalItems }}</strong></div>
+        <div v-if="totalItems" key="my-wishlist" class="my-wishlist">
+          <div class="my-wishlist__total-items">
+            Total items: <strong>{{ totalItems }}</strong>
+          </div>
           <div class="collected-product-list">
             <transition-group name="fade" tag="div">
               <SfCollectedProduct
@@ -30,30 +32,32 @@
                 :stock="99999"
                 image-width="180"
                 image-height="200"
-                @click:remove="removeItem({ product })"
                 class="collected-product"
+                @click:remove="removeItem({ product })"
               >
-               <template #configuration>
+                <template #configuration>
                   <div class="collected-product__properties">
-                    <SfProperty v-for="(attribute, key) in wishlistGetters.getItemAttributes(product, ['color', 'size'])" :key="key" :name="key" :value="attribute"/>
+                    <SfProperty v-for="(attribute, key) in wishlistGetters.getItemAttributes(product, ['color', 'size'])" :key="key" :name="key" :value="attribute" />
                   </div>
                 </template>
-                <template #input="{}">&nbsp;</template>
+                <template #input="{}">
+&nbsp;
+                </template>
               </SfCollectedProduct>
             </transition-group>
           </div>
           <div class="sidebar-bottom">
-          <SfProperty class="sf-property--full-width my-wishlist__total-price">
-            <template #name>
-              <span class="my-wishlist__total-price-label">Total price:</span>
-            </template>
-            <template #value>
-              <SfPrice :regular="$n(totals.subtotal, 'currency')" />
-            </template>
-          </SfProperty>
+            <SfProperty class="sf-property--full-width my-wishlist__total-price">
+              <template #name>
+                <span class="my-wishlist__total-price-label">Total price:</span>
+              </template>
+              <template #value>
+                <SfPrice :regular="$n(totals.subtotal, 'currency')" />
+              </template>
+            </SfProperty>
           </div>
         </div>
-        <div v-else class="empty-wishlist" key="empty-wishlist">
+        <div v-else key="empty-wishlist" class="empty-wishlist">
           <div class="empty-wishlist__banner">
             <SfImage src="/icons/empty-cart.svg" alt="Empty bag" class="empty-wishlist__icon" />
             <SfHeading
@@ -66,7 +70,7 @@
         </div>
       </transition>
       <template #content-bottom>
-        <SfButton @click="toggleWishlistSidebar" class="sf-button--full-width color-secondary">
+        <SfButton class="sf-button--full-width color-secondary" @click="toggleWishlistSidebar">
           {{ $t('Start shopping') }}
         </SfButton>
       </template>
@@ -83,10 +87,10 @@ import {
   SfPrice,
   SfCollectedProduct,
   SfImage
-} from '@storefront-ui/vue';
-import { computed } from '@vue/composition-api';
-import { useWishlist, useUser, wishlistGetters } from '@vue-storefront/commercetools';
-import { useUiState } from '~/composables';
+} from '@storefront-ui/vue'
+import { computed } from '@vue/composition-api'
+import { useWishlist, useUser, wishlistGetters } from '@vue-storefront/commercetools'
+import { useUiState } from '~/composables'
 
 export default {
   name: 'Wishlist',
@@ -100,15 +104,15 @@ export default {
     SfCollectedProduct,
     SfImage
   },
-  setup() {
-    const { isWishlistSidebarOpen, toggleWishlistSidebar } = useUiState();
-    const { wishlist, removeItem, load: loadWishlist } = useWishlist();
-    const { isAuthenticated } = useUser();
-    const products = computed(() => wishlistGetters.getItems(wishlist.value));
-    const totals = computed(() => wishlistGetters.getTotals(wishlist.value));
-    const totalItems = computed(() => wishlistGetters.getTotalItems(wishlist.value));
+  setup () {
+    const { isWishlistSidebarOpen, toggleWishlistSidebar } = useUiState()
+    const { wishlist, removeItem, load: loadWishlist } = useWishlist()
+    const { isAuthenticated } = useUser()
+    const products = computed(() => wishlistGetters.getItems(wishlist.value))
+    const totals = computed(() => wishlistGetters.getTotals(wishlist.value))
+    const totalItems = computed(() => wishlistGetters.getTotalItems(wishlist.value))
 
-    loadWishlist();
+    loadWishlist()
 
     return {
       isAuthenticated,
@@ -119,9 +123,9 @@ export default {
       totals,
       totalItems,
       wishlistGetters
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

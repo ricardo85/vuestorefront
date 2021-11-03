@@ -36,7 +36,7 @@ import {
   SfBanner,
   SfImage,
   SfButton
-} from '@storefront-ui/vue';
+} from '@storefront-ui/vue'
 export default {
   name: 'AppStoreBanner',
   components: {
@@ -44,7 +44,7 @@ export default {
     SfImage,
     SfButton
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 

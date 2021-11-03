@@ -7,23 +7,26 @@
       class="tab-orphan"
     >
       <SfTab
-        :title="isNewAddress ? 'Add the address' : 'Update the address'">
+        :title="isNewAddress ? 'Add the address' : 'Update the address'"
+      >
         <p class="message">
           {{ $t('Contact details updated') }}
         </p>
 
         <ShippingAddressForm
           :address="activeAddress"
-          :isNew="isNewAddress"
-          @submit="saveAddress" />
+          :is-new="isNewAddress"
+          @submit="saveAddress"
+        />
       </SfTab>
     </SfTabs>
 
     <SfTabs
       v-else
-      :open-tab="1"
       key="address-list"
-      class="tab-orphan">
+      :open-tab="1"
+      class="tab-orphan"
+    >
       <SfTab title="Shipping details">
         <p class="message">
           {{ $t('Manage shipping addresses') }}
@@ -32,7 +35,8 @@
           <div
             v-for="address in addresses"
             :key="userShippingGetters.getId(address)"
-            class="shipping">
+            class="shipping"
+          >
             <div class="shipping__content">
               <div class="shipping__address">
                 <UserShippingAddress :address="address" />
@@ -48,13 +52,15 @@
                 @click="removeAddress(address)"
               />
               <SfButton
-                @click="changeAddress(address)">
+                @click="changeAddress(address)"
+              >
                 {{ $t('Change') }}
               </SfButton>
 
               <SfButton
                 class="color-light shipping__button-delete desktop-only"
-                @click="removeAddress(address)">
+                @click="removeAddress(address)"
+              >
                 {{ $t('Delete') }}
               </SfButton>
             </div>
@@ -62,7 +68,8 @@
         </transition-group>
         <SfButton
           class="action-button"
-          @click="changeAddress()">
+          @click="changeAddress()"
+        >
           {{ $t('Add new address') }}
         </SfButton>
       </SfTab>
@@ -74,12 +81,12 @@ import {
   SfTabs,
   SfButton,
   SfIcon
-} from '@storefront-ui/vue';
-import UserShippingAddress from '~/components/UserShippingAddress';
-import ShippingAddressForm from '~/components/MyAccount/ShippingAddressForm';
-import { useUserShipping, userShippingGetters } from '@vue-storefront/commercetools';
-import { ref, computed } from '@vue/composition-api';
-import { onSSR } from '@vue-storefront/core';
+} from '@storefront-ui/vue'
+import { useUserShipping, userShippingGetters } from '@vue-storefront/commercetools'
+import { ref, computed } from '@vue/composition-api'
+import { onSSR } from '@vue-storefront/core'
+import ShippingAddressForm from '~/components/MyAccount/ShippingAddressForm'
+import UserShippingAddress from '~/components/UserShippingAddress'
 
 export default {
   name: 'ShippingDetails',
@@ -90,35 +97,35 @@ export default {
     UserShippingAddress,
     ShippingAddressForm
   },
-  setup() {
-    const { shipping, load: loadUserShipping, addAddress, deleteAddress, updateAddress } = useUserShipping();
-    const addresses = computed(() => userShippingGetters.getAddresses(shipping.value));
-    const edittingAddress = ref(false);
-    const activeAddress = ref(undefined);
-    const isNewAddress = computed(() => !activeAddress.value);
+  setup () {
+    const { shipping, load: loadUserShipping, addAddress, deleteAddress, updateAddress } = useUserShipping()
+    const addresses = computed(() => userShippingGetters.getAddresses(shipping.value))
+    const edittingAddress = ref(false)
+    const activeAddress = ref(undefined)
+    const isNewAddress = computed(() => !activeAddress.value)
 
     const changeAddress = (address = undefined) => {
-      activeAddress.value = address;
-      edittingAddress.value = true;
-    };
+      activeAddress.value = address
+      edittingAddress.value = true
+    }
 
-    const removeAddress = address => deleteAddress({ address });
+    const removeAddress = address => deleteAddress({ address })
 
     const saveAddress = async ({ form, onComplete, onError }) => {
       try {
-        const actionMethod = isNewAddress.value ? addAddress : updateAddress;
-        const data = await actionMethod({ address: form });
-        edittingAddress.value = false;
-        activeAddress.value = undefined;
-        await onComplete(data);
+        const actionMethod = isNewAddress.value ? addAddress : updateAddress
+        const data = await actionMethod({ address: form })
+        edittingAddress.value = false
+        activeAddress.value = undefined
+        await onComplete(data)
       } catch (error) {
-        onError(error);
+        onError(error)
       }
-    };
+    }
 
     onSSR(async () => {
-      await loadUserShipping();
-    });
+      await loadUserShipping()
+    })
 
     return {
       changeAddress,
@@ -130,9 +137,9 @@ export default {
       edittingAddress,
       activeAddress,
       isNewAddress
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang='scss' scoped>

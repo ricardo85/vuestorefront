@@ -21,15 +21,15 @@
             <transition-group name="sf-fade" tag="div">
               <SfCollectedProduct
                 v-for="product in products"
-                v-e2e="'collected-product'"
                 :key="cartGetters.getItemSku(product)"
+                v-e2e="'collected-product'"
                 :image="cartGetters.getItemImage(product)"
                 :title="cartGetters.getItemName(product)"
                 :regular-price="$n(cartGetters.getItemPrice(product).regular, 'currency')"
                 :special-price="cartGetters.getItemPrice(product).special && $n(cartGetters.getItemPrice(product).special, 'currency')"
                 :stock="99999"
-                @click:remove="removeItem({ product })"
                 class="collected-product"
+                @click:remove="removeItem({ product })"
               >
                 <template #configuration>
                   <div class="collected-product__properties">
@@ -98,10 +98,11 @@
           </div>
           <div v-else>
             <SfButton
-              class="sf-button--full-width color-primary"
+              class="sf-button--full-width color-primary sf-button--cart"
               @click="toggleCartSidebar"
-            >{{ $t('Go back shopping') }}</SfButton
             >
+              {{ $t('Go back shopping') }}
+            </SfButton>
           </div>
         </transition>
       </template>
@@ -119,10 +120,10 @@ import {
   SfCollectedProduct,
   SfImage,
   SfQuantitySelector
-} from '@storefront-ui/vue';
-import { computed } from '@vue/composition-api';
-import { useCart, useUser, cartGetters } from '@vue-storefront/commercetools';
-import { useUiState } from '~/composables';
+} from '@storefront-ui/vue'
+import { computed } from '@vue/composition-api'
+import { useCart, useUser, cartGetters } from '@vue-storefront/commercetools'
+import { useUiState } from '~/composables'
 
 export default {
   name: 'Cart',
@@ -137,14 +138,14 @@ export default {
     SfImage,
     SfQuantitySelector
   },
-  setup() {
-    const { isCartSidebarOpen, toggleCartSidebar } = useUiState();
-    const { cart, removeItem, updateItemQty, load: loadCart, loading } = useCart();
-    const { isAuthenticated } = useUser();
-    const products = computed(() => cartGetters.getItems(cart.value));
-    const totals = computed(() => cartGetters.getTotals(cart.value));
-    const totalItems = computed(() => cartGetters.getTotalItems(cart.value));
-    loadCart();
+  setup () {
+    const { isCartSidebarOpen, toggleCartSidebar } = useUiState()
+    const { cart, removeItem, updateItemQty, load: loadCart, loading } = useCart()
+    const { isAuthenticated } = useUser()
+    const products = computed(() => cartGetters.getItems(cart.value))
+    const totals = computed(() => cartGetters.getTotals(cart.value))
+    const totalItems = computed(() => cartGetters.getTotalItems(cart.value))
+    loadCart()
 
     return {
       loading,
@@ -157,9 +158,9 @@ export default {
       totals,
       totalItems,
       cartGetters
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

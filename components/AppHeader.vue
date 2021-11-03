@@ -3,16 +3,16 @@
     <SfHeader
       class="sf-header--has-mobile-search"
       :class="{'header-on-top': isSearchOpen}"
-      :isNavVisible="isMobileMenuOpen"
+      :is-nav-visible="isMobileMenuOpen"
     >
       <!-- TODO: add mobile view buttons after SFUI team PR -->
       <template #logo>
         <nuxt-link :to="localePath('/')" class="sf-header__logo">
-          <SfImage src="/icons/logo.svg" alt="Vue Storefront Next" class="sf-header__logo-image"/>
+          <SfImage src="/icons/logo.svg" alt="Vue Storefront Next" class="sf-header__logo-image" />
         </nuxt-link>
       </template>
       <template #navigation>
-        <HeaderNavigation :isMobile="isMobile" />
+        <HeaderNavigation :is-mobile="isMobile" />
       </template>
       <template #aside>
         <StoreLocaleSelector class="smartphone-only" />
@@ -41,21 +41,22 @@
           </SfButton>
           <SfButton
             v-e2e="'app-header-cart'"
-            class="sf-button--pure sf-header__action"
+            class="color-secondary sf-header__action pl-30 pr-30 pt-0 pb-0"
             @click="toggleCartSidebar"
           >
+            <span class="mr-5">{{ cartTotalItems }} Artikel</span>
             <SfIcon
-              class="sf-header__icon"
+              class="sf-header__icon color-white"
               icon="empty_cart"
               size="1.25rem"
             />
-            <SfBadge v-if="cartTotalItems" class="sf-badge--number cart-badge">{{cartTotalItems}}</SfBadge>
           </SfButton>
         </div>
       </template>
       <template #search>
         <SfSearchBar
           ref="searchBarRef"
+          v-click-outside="closeSearch"
           :placeholder="$t('Search for items')"
           aria-label="Search"
           class="sf-header__search"
@@ -64,7 +65,6 @@
           @keydown.enter="handleSearch($event)"
           @focus="isSearchOpen = true"
           @keydown.esc="closeSearch"
-          v-click-outside="closeSearch"
         >
           <template #icon>
             <SfButton
@@ -95,21 +95,20 @@
 </template>
 
 <script>
-import { SfHeader, SfImage, SfIcon, SfButton, SfBadge, SfSearchBar, SfOverlay, SfMenuItem, SfLink } from '@storefront-ui/vue';
-import { useUiState } from '~/composables';
-import { useCart, useUser, cartGetters } from '@vue-storefront/commercetools';
-import { computed, ref, onBeforeUnmount, watch } from '@vue/composition-api';
-import { useUiHelpers } from '~/composables';
-import StoreLocaleSelector from './StoreLocaleSelector';
-import SearchResults from '~/components/SearchResults';
-import HeaderNavigation from './HeaderNavigation';
-import { clickOutside } from '@storefront-ui/vue/src/utilities/directives/click-outside/click-outside-directive.js';
+import { SfHeader, SfImage, SfIcon, SfButton, SfBadge, SfSearchBar, SfOverlay, SfMenuItem, SfLink } from '@storefront-ui/vue'
+import { useCart, useUser, cartGetters } from '@vue-storefront/commercetools'
+import { computed, ref, onBeforeUnmount, watch } from '@vue/composition-api'
+import { clickOutside } from '@storefront-ui/vue/src/utilities/directives/click-outside/click-outside-directive.js'
 import {
   mapMobileObserver,
   unMapMobileObserver
-} from '@storefront-ui/vue/src/utilities/mobile-observer.js';
-import debounce from 'lodash.debounce';
-import mockedSearchProducts from '../mockedSearchProducts.json';
+} from '@storefront-ui/vue/src/utilities/mobile-observer.js'
+import debounce from 'lodash.debounce'
+import mockedSearchProducts from '../mockedSearchProducts.json'
+import HeaderNavigation from './HeaderNavigation'
+import StoreLocaleSelector from './StoreLocaleSelector'
+import SearchResults from '~/components/SearchResults'
+import { useUiState, useUiHelpers } from '~/composables'
 
 export default {
   components: {
@@ -127,75 +126,74 @@ export default {
     HeaderNavigation
   },
   directives: { clickOutside },
-  setup(props, { root }) {
-    const { toggleCartSidebar, toggleWishlistSidebar, toggleLoginModal, isMobileMenuOpen } = useUiState();
-    const { setTermForUrl, getFacetsFromURL } = useUiHelpers();
-    const { isAuthenticated, load: loadUser } = useUser();
-    const { cart } = useCart();
-    const term = ref(getFacetsFromURL().phrase);
-    const isSearchOpen = ref(false);
-    const searchBarRef = ref(null);
-    const result = ref(null);
-    const isMobile = ref(mapMobileObserver().isMobile.get());
+  setup (props, { root }) {
+    const { toggleCartSidebar, toggleWishlistSidebar, toggleLoginModal, isMobileMenuOpen } = useUiState()
+    const { setTermForUrl, getFacetsFromURL } = useUiHelpers()
+    const { isAuthenticated, load: loadUser } = useUser()
+    const { cart } = useCart()
+    const term = ref(getFacetsFromURL().phrase)
+    const isSearchOpen = ref(false)
+    const searchBarRef = ref(null)
+    const result = ref(null)
+    const isMobile = ref(mapMobileObserver().isMobile.get())
 
     const cartTotalItems = computed(() => {
-      const count = cartGetters.getTotalItems(cart.value);
-      return count ? count.toString() : null;
-    });
+      const count = cartGetters.getTotalItems(cart.value)
+      return count ? count.toString() : 0
+    })
 
-    const accountIcon = computed(() => isAuthenticated.value ? 'profile_fill' : 'profile');
+    const accountIcon = computed(() => isAuthenticated.value ? 'profile_fill' : 'profile')
 
-    loadUser();
+    loadUser()
 
     // TODO: https://github.com/DivanteLtd/vue-storefront/issues/4927
     const handleAccountClick = async () => {
       if (isAuthenticated.value) {
-        return root.$router.push('/my-account');
+        return root.$router.push('/my-account')
       }
 
-      toggleLoginModal();
-    };
+      toggleLoginModal()
+    }
 
     const closeSearch = () => {
-      if (!isSearchOpen.value) return;
+      if (!isSearchOpen.value) { return }
 
-      term.value = '';
-      isSearchOpen.value = false;
-    };
+      term.value = ''
+      isSearchOpen.value = false
+    }
 
     const handleSearch = debounce(async (paramValue) => {
       if (!paramValue.target) {
-        term.value = paramValue;
+        term.value = paramValue
       } else {
-        term.value = paramValue.target.value;
+        term.value = paramValue.target.value
       }
-      result.value = mockedSearchProducts;
-
-    }, 1000);
+      result.value = mockedSearchProducts
+    }, 1000)
 
     const closeOrFocusSearchBar = () => {
       if (isMobile.value) {
-        return closeSearch();
+        return closeSearch()
       } else {
-        term.value = '';
-        return searchBarRef.value.$el.children[0].focus();
+        term.value = ''
+        return searchBarRef.value.$el.children[0].focus()
       }
-    };
+    }
 
     watch(() => term.value, (newVal, oldVal) => {
-      const shouldSearchBeOpened = (!isMobile.value && term.value.length > 0) && ((!oldVal && newVal) || (newVal.length !== oldVal.length && isSearchOpen.value === false));
+      const shouldSearchBeOpened = (!isMobile.value && term.value.length > 0) && ((!oldVal && newVal) || (newVal.length !== oldVal.length && isSearchOpen.value === false))
       if (shouldSearchBeOpened) {
-        isSearchOpen.value = true;
+        isSearchOpen.value = true
       }
-    });
+    })
 
     const removeSearchResults = () => {
-      result.value = null;
-    };
+      result.value = null
+    }
 
     onBeforeUnmount(() => {
-      unMapMobileObserver();
-    });
+      unMapMobileObserver()
+    })
 
     return {
       accountIcon,
@@ -214,9 +212,9 @@ export default {
       isMobile,
       isMobileMenuOpen,
       removeSearchResults
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

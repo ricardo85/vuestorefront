@@ -31,15 +31,15 @@
 </template>
 <script>
 
-import { SfSteps, SfButton } from '@storefront-ui/vue';
-import CartPreview from '~/components/Checkout/CartPreview';
-import { computed } from '@vue/composition-api';
+import { SfSteps, SfButton } from '@storefront-ui/vue'
+import { computed } from '@vue/composition-api'
+import CartPreview from '~/components/Checkout/CartPreview'
 
 const STEPS = {
   shipping: 'Shipping',
   billing: 'Billing',
   payment: 'Payment'
-};
+}
 
 export default {
   name: 'Checkout',
@@ -48,15 +48,15 @@ export default {
     SfSteps,
     CartPreview
   },
-  setup(props, context) {
-    const currentStep = computed(() => context.root.$route.path.split('/').pop());
-    const currentStepIndex = computed(() => Object.keys(STEPS).findIndex(s => s === currentStep.value));
-    const isThankYou = computed(() => currentStep.value === 'thank-you');
+  setup (props, context) {
+    const currentStep = computed(() => context.root.$route.path.split('/').pop())
+    const currentStepIndex = computed(() => Object.keys(STEPS).findIndex(s => s === currentStep.value))
+    const isThankYou = computed(() => currentStep.value === 'thank-you')
 
     const handleStepClick = (stepIndex) => {
-      const key = Object.keys(STEPS)[stepIndex];
-      context.root.$router.push(`/checkout/${key}`);
-    };
+      const key = Object.keys(STEPS)[stepIndex]
+      context.root.$router.push(`/checkout/${key}`)
+    }
 
     return {
       handleStepClick,
@@ -64,9 +64,9 @@ export default {
       currentStepIndex,
       isThankYou,
       currentStep
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

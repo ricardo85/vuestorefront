@@ -2,7 +2,9 @@
   <SfTabs :open-tab="1">
     <SfTab title="My orders">
       <div v-if="currentOrder">
-        <SfButton class="sf-button--text all-orders" @click="currentOrder = null">All Orders</SfButton>
+        <SfButton class="sf-button--text all-orders" @click="currentOrder = null">
+          All Orders
+        </SfButton>
         <div class="highlighted highlighted--total">
           <SfProperty
             name="Order ID"
@@ -27,18 +29,20 @@
         </div>
         <SfTable class="products">
           <SfTableHeading>
-            <SfTableHeader class="products__name">{{ $t('Product') }}</SfTableHeader>
+            <SfTableHeader class="products__name">
+              {{ $t('Product') }}
+            </SfTableHeader>
             <SfTableHeader>{{ $t('Quantity') }}</SfTableHeader>
             <SfTableHeader>{{ $t('Price') }}</SfTableHeader>
           </SfTableHeading>
           <SfTableRow v-for="(item, i) in orderGetters.getItems(currentOrder)" :key="i">
             <SfTableData class="products__name">
               <nuxt-link :to="'/p/'+orderGetters.getItemSku(item)+'/'+orderGetters.getItemSku(item)">
-                {{orderGetters.getItemName(item)}}
+                {{ orderGetters.getItemName(item) }}
               </nuxt-link>
             </SfTableData>
-            <SfTableData>{{orderGetters.getItemQty(item)}}</SfTableData>
-            <SfTableData>{{$n(orderGetters.getItemPrice(item), 'currency')}}</SfTableData>
+            <SfTableData>{{ orderGetters.getItemQty(item) }}</SfTableData>
+            <SfTableData>{{ $n(orderGetters.getItemPrice(item), 'currency') }}</SfTableData>
           </SfTableRow>
         </SfTable>
       </div>
@@ -47,15 +51,21 @@
           {{ $t('Details and status orders') }}
         </p>
         <div v-if="orders.length === 0" class="no-orders">
-          <p class="no-orders__title">{{ $t('You currently have no orders') }}</p>
-          <SfButton class="no-orders__button">{{ $t('Start shopping') }}</SfButton>
+          <p class="no-orders__title">
+            {{ $t('You currently have no orders') }}
+          </p>
+          <SfButton class="no-orders__button">
+            {{ $t('Start shopping') }}
+          </SfButton>
         </div>
         <SfTable v-else class="orders">
           <SfTableHeading>
             <SfTableHeader
               v-for="tableHeader in tableHeaders"
               :key="tableHeader"
-              >{{ tableHeader }}</SfTableHeader>
+            >
+              {{ tableHeader }}
+            </SfTableHeader>
             <SfTableHeader class="orders__element--right">
               <span class="smartphone-only">{{ $t('Download') }}</span>
               <SfButton
@@ -89,8 +99,10 @@
     <SfTab title="Returns">
       <p class="message">
         This feature is not implemented yet! Please take a look at
-        <br />
-        <SfLink class="message__link" href="#">https://github.com/DivanteLtd/vue-storefront/issues</SfLink>
+        <br>
+        <SfLink class="message__link" href="#">
+          https://github.com/DivanteLtd/vue-storefront/issues
+        </SfLink>
         for our Roadmap!
       </p>
     </SfTab>
@@ -103,11 +115,10 @@ import {
   SfTable,
   SfButton,
   SfProperty
-} from '@storefront-ui/vue';
-import { computed, ref } from '@vue/composition-api';
-import { useUserOrder, orderGetters } from '@vue-storefront/commercetools';
-import { AgnosticOrderStatus } from '@vue-storefront/core';
-import { onSSR } from '@vue-storefront/core';
+} from '@storefront-ui/vue'
+import { computed, ref } from '@vue/composition-api'
+import { useUserOrder, orderGetters } from '@vue-storefront/commercetools'
+import { AgnosticOrderStatus, onSSR } from '@vue-storefront/core'
 
 export default {
   name: 'PersonalDetails',
@@ -117,52 +128,52 @@ export default {
     SfButton,
     SfProperty
   },
-  setup() {
-    const { orders, search } = useUserOrder();
-    const currentOrder = ref(null);
+  setup () {
+    const { orders, search } = useUserOrder()
+    const currentOrder = ref(null)
 
     onSSR(async () => {
-      await search();
-    });
+      await search()
+    })
 
     const tableHeaders = [
       'Order ID',
       'Payment date',
       'Amount',
       'Status'
-    ];
+    ]
 
     const getStatusTextClass = (order) => {
-      const status = orderGetters.getStatus(order);
+      const status = orderGetters.getStatus(order)
       switch (status) {
         case AgnosticOrderStatus.Open:
-          return 'text-warning';
+          return 'text-warning'
         case AgnosticOrderStatus.Complete:
-          return 'text-success';
+          return 'text-success'
         default:
-          return '';
+          return ''
       }
-    };
+    }
 
     const downloadFile = (file, name) => {
-      const a = document.createElement('a');
-      document.body.appendChild(a);
-      a.style = 'display: none';
+      const a = document.createElement('a')
+      document.body.appendChild(a)
+      a.style = 'display: none'
 
-      const url = window.URL.createObjectURL(file);
-      a.href = url;
-      a.download = name;
-      a.click();
-      window.URL.revokeObjectURL(url);
-    };
+      const url = window.URL.createObjectURL(file)
+      a.href = url
+      a.download = name
+      a.click()
+      window.URL.revokeObjectURL(url)
+    }
 
     const downloadOrders = async () => {
-      downloadFile(new Blob([JSON.stringify(orders.value)], {type: 'application/json'}), 'orders.json');
-    };
+      downloadFile(new Blob([JSON.stringify(orders.value)], { type: 'application/json' }), 'orders.json')
+    }
 
     const downloadOrder = async (order) => {
-      downloadFile(new Blob([JSON.stringify(order)], {type: 'application/json'}), 'order ' + orderGetters.getId(order) + '.json');
-    };
+      downloadFile(new Blob([JSON.stringify(order)], { type: 'application/json' }), 'order ' + orderGetters.getId(order) + '.json')
+    }
 
     return {
       tableHeaders,
@@ -173,9 +184,9 @@ export default {
       downloadOrder,
       downloadOrders,
       currentOrder
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang='scss' scoped>

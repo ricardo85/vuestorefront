@@ -1,7 +1,7 @@
 <template>
   <ValidationObserver v-slot="{ handleSubmit, reset }">
     <form class="form" @submit.prevent="handleSubmit(submitForm(reset))">
-      <ValidationProvider rules="required" v-slot="{ errors }" class="form__element">
+      <ValidationProvider v-slot="{ errors }" rules="required" class="form__element">
         <SfInput
           v-model="form.currentPassword"
           type="password"
@@ -9,11 +9,11 @@
           label="Current Password"
           required
           :valid="!errors[0]"
-          :errorMessage="errors[0]"
+          :error-message="errors[0]"
         />
       </ValidationProvider>
       <div class="form__horizontal">
-        <ValidationProvider rules="required|password" v-slot="{ errors }" vid="password" class="form__element">
+        <ValidationProvider v-slot="{ errors }" rules="required|password" vid="password" class="form__element">
           <SfInput
             v-model="form.newPassword"
             type="password"
@@ -21,10 +21,10 @@
             label="New Password"
             required
             :valid="!errors[0]"
-            :errorMessage="errors[0]"
+            :error-message="errors[0]"
           />
         </ValidationProvider>
-        <ValidationProvider rules="required|confirmed:password" v-slot="{ errors }" class="form__element">
+        <ValidationProvider v-slot="{ errors }" rules="required|confirmed:password" class="form__element">
           <SfInput
             v-model="form.repeatPassword"
             type="password"
@@ -32,19 +32,21 @@
             label="Repeat Password"
             required
             :valid="!errors[0]"
-            :errorMessage="errors[0]"
+            :error-message="errors[0]"
           />
         </ValidationProvider>
       </div>
-      <SfButton class="form__button">{{ $t('Update password') }}</SfButton>
+      <SfButton class="form__button">
+        {{ $t('Update password') }}
+      </SfButton>
     </form>
   </ValidationObserver>
 </template>
 
 <script>
-import { ref } from '@vue/composition-api';
-import { ValidationProvider, ValidationObserver } from 'vee-validate';
-import { SfInput, SfButton } from '@storefront-ui/vue';
+import { ref } from '@vue/composition-api'
+import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import { SfInput, SfButton } from '@storefront-ui/vue'
 
 export default {
   name: 'PasswordResetForm',
@@ -56,36 +58,36 @@ export default {
     ValidationObserver
   },
 
-  setup(_, { emit }) {
+  setup (_, { emit }) {
     const resetForm = () => ({
       currentPassword: '',
       newPassword: '',
       repeatPassword: ''
-    });
+    })
 
-    const form = ref(resetForm());
+    const form = ref(resetForm())
 
     const submitForm = (resetValidationFn) => {
       return () => {
         const onComplete = () => {
-          form.value = resetForm();
-          resetValidationFn();
-        };
+          form.value = resetForm()
+          resetValidationFn()
+        }
 
         const onError = () => {
           // TODO: Handle error
-        };
+        }
 
-        emit('submit', { form, onComplete, onError });
-      };
-    };
+        emit('submit', { form, onComplete, onError })
+      }
+    }
 
     return {
       form,
       submitForm
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang='scss' scoped>

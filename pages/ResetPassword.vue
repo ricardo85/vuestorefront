@@ -11,78 +11,72 @@
         :title="$t('Reset Password')"
       />
     </template>
-      <div v-if="!isPasswordChanged">
-        <ValidationObserver v-slot="{ handleSubmit }" key="log-in">
-          <form class="form" @submit.prevent="handleSubmit(setNewPassword)">
-            <ValidationProvider rules="required" v-slot="{ errors }">
-              <SfInput
-                v-e2e="'reset-password-modal-password'"
-                v-model="form.password"
-                :valid="!errors[0]"
-                :errorMessage="errors[0]"
-                :label="$t('Password')"
-                name="password"
-                type="password"
-                class="form__element"
-              />
-            </ValidationProvider>
-            <ValidationProvider rules="required" v-slot="{ errors }">
-              <SfInput
-                v-e2e="'reset-password-modal-password-repeat'"
-                v-model="form.repeatPassword"
-                :valid="!errors[0]"
-                :errorMessage="errors[0]"
-                :label="$t('Repeat Password')"
-                name="repeat-password"
-                type="password"
-                class="form__element"
-              />
-            </ValidationProvider>
-            <div v-if="passwordMatchError || forgotPasswordError.setNew">
-              {{ passwordMatchError || forgotPasswordError.setNew.message }}
-            </div>
-            <SfButton
-              v-e2e="'reset-password-modal-submit'"
-              type="submit"
-              class="sf-button--full-width form__button"
-              :disabled="forgotPasswordLoading"
-            >
-              <SfLoader :class="{ loader: forgotPasswordLoading }" :loading="forgotPasswordLoading">
-                <div>{{ $t('Save Password') }}</div>
-              </SfLoader>
-            </SfButton>
-          </form>
-        </ValidationObserver>
-      </div>
-      <div v-else>
-        <p>{{ $t('Password Changed') }}</p>
-        <SfButton class="sf-button--text" link="/">
-          {{ $t('Back to home') }}
-        </SfButton>
-      </div>
+    <div v-if="!isPasswordChanged">
+      <ValidationObserver v-slot="{ handleSubmit }" key="log-in">
+        <form class="form" @submit.prevent="handleSubmit(setNewPassword)">
+          <ValidationProvider v-slot="{ errors }" rules="required">
+            <SfInput
+              v-model="form.password"
+              v-e2e="'reset-password-modal-password'"
+              :valid="!errors[0]"
+              :error-message="errors[0]"
+              :label="$t('Password')"
+              name="password"
+              type="password"
+              class="form__element"
+            />
+          </ValidationProvider>
+          <ValidationProvider v-slot="{ errors }" rules="required">
+            <SfInput
+              v-model="form.repeatPassword"
+              v-e2e="'reset-password-modal-password-repeat'"
+              :valid="!errors[0]"
+              :error-message="errors[0]"
+              :label="$t('Repeat Password')"
+              name="repeat-password"
+              type="password"
+              class="form__element"
+            />
+          </ValidationProvider>
+          <div v-if="passwordMatchError || forgotPasswordError.setNew">
+            {{ passwordMatchError || forgotPasswordError.setNew.message }}
+          </div>
+          <SfButton
+            v-e2e="'reset-password-modal-submit'"
+            type="submit"
+            class="sf-button--full-width form__button"
+            :disabled="forgotPasswordLoading"
+          >
+            <SfLoader :class="{ loader: forgotPasswordLoading }" :loading="forgotPasswordLoading">
+              <div>{{ $t('Save Password') }}</div>
+            </SfLoader>
+          </SfButton>
+        </form>
+      </ValidationObserver>
+    </div>
+    <div v-else>
+      <p>{{ $t('Password Changed') }}</p>
+      <SfButton class="sf-button--text" link="/">
+        {{ $t('Back to home') }}
+      </SfButton>
+    </div>
   </SfModal>
 </template>
 <script>
 
-import { SfModal, SfButton, SfLoader, SfBar, SfInput } from '@storefront-ui/vue';
-import { ref, computed } from '@vue/composition-api';
-import { useForgotPassword, forgotPasswordGetters } from '@vue-storefront/commercetools';
-import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
-import { required } from 'vee-validate/dist/rules';
+import { SfModal, SfButton, SfLoader, SfBar, SfInput } from '@storefront-ui/vue'
+import { ref, computed } from '@vue/composition-api'
+import { useForgotPassword, forgotPasswordGetters } from '@vue-storefront/commercetools'
+import { ValidationProvider, ValidationObserver, extend } from 'vee-validate'
+import { required } from 'vee-validate/dist/rules'
 
 extend('required', {
   ...required,
   message: 'This field is required'
-});
+})
 
 export default {
   name: 'ResetPassword',
-  layout: 'blank',
-  middleware({ redirect, route }) {
-    if (!route.query.token) {
-      return redirect('/');
-    }
-  },
   components: {
     SfButton,
     SfModal,
@@ -92,23 +86,29 @@ export default {
     ValidationProvider,
     ValidationObserver
   },
-  setup(props, context) {
-    const { result, setNew, error: forgotPasswordError, loading: forgotPasswordLoading } = useForgotPassword();
-    const passwordMatchError = ref(false);
-    const form = ref({});
-    const isPasswordChanged = computed(() => forgotPasswordGetters.isPasswordChanged(result.value));
+  layout: 'blank',
+  middleware ({ redirect, route }) {
+    if (!route.query.token) {
+      return redirect('/')
+    }
+  },
+  setup (props, context) {
+    const { result, setNew, error: forgotPasswordError, loading: forgotPasswordLoading } = useForgotPassword()
+    const passwordMatchError = ref(false)
+    const form = ref({})
+    const isPasswordChanged = computed(() => forgotPasswordGetters.isPasswordChanged(result.value))
 
-    const token = context.root.$route.query.token;
+    const token = context.root.$route.query.token
 
     const setNewPassword = async () => {
-      passwordMatchError.value = false;
+      passwordMatchError.value = false
       if (form.value.password !== form.value.repeatPassword) {
-        passwordMatchError.value = 'Passwords do not match';
-        return;
+        passwordMatchError.value = 'Passwords do not match'
+        return
       }
 
-      await setNew({ tokenValue: token, newPassword: form.value.password });
-    };
+      await setNew({ tokenValue: token, newPassword: form.value.password })
+    }
 
     return {
       isPasswordChanged,
@@ -117,9 +117,9 @@ export default {
       forgotPasswordLoading,
       forgotPasswordError,
       passwordMatchError
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

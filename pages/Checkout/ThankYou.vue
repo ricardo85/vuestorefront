@@ -33,15 +33,25 @@
             title="Primary contacts for any questions"
           />
           <div class="contact">
-            <p class="contact__name">{{ address.name }}</p>
-            <p class="contact__street">{{ address.street }}</p>
-            <p class="contact__city">{{ address.city }}</p>
-            <p class="contact__email">{{ address.email }}</p>
+            <p class="contact__name">
+              {{ address.name }}
+            </p>
+            <p class="contact__street">
+              {{ address.street }}
+            </p>
+            <p class="contact__city">
+              {{ address.city }}
+            </p>
+            <p class="contact__email">
+              {{ address.email }}
+            </p>
           </div>
         </div>
-        <SfButton class="order__notifications-button button-size"
-          >{{ $t('Allow order notifications') }}</SfButton
+        <SfButton
+          class="order__notifications-button button-size"
         >
+          {{ $t('Allow order notifications') }}
+        </SfButton>
       </div>
       <div class="additional-info">
         <div>
@@ -65,24 +75,27 @@
           </p>
           <SfButton
             class="feedback-button color-secondary sf-button--full-width button-size"
-            >{{ $t('Send my feedback') }}</SfButton
           >
+            {{ $t('Send my feedback') }}
+          </SfButton>
         </div>
       </div>
     </section>
-    <SfButton link="/" class="sf-button back-button color-secondary button-size">{{ $t('Back to homepage') }}</SfButton>
+    <SfButton link="/" class="sf-button back-button color-secondary button-size">
+      {{ $t('Back to homepage') }}
+    </SfButton>
   </div>
 </template>
 
 <script>
-import { SfHeading, SfButton, SfCallToAction } from '@storefront-ui/vue';
+import { SfHeading, SfButton, SfCallToAction } from '@storefront-ui/vue'
 export default {
   components: {
     SfHeading,
     SfButton,
     SfCallToAction
   },
-  setup(props, context) {
+  setup (props, context) {
     return {
       address: {
         name: 'Company Headquarter',
@@ -93,9 +106,9 @@ export default {
       order: {
         number: `#${context.root.$route.query.order}`
       }
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

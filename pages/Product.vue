@@ -38,7 +38,9 @@
                 ({{ totalReviews }})
               </a>
             </div>
-            <SfButton class="sf-button--text">{{ $t('Read all reviews') }}</SfButton>
+            <SfButton class="sf-button--text">
+              {{ $t('Read all reviews') }}
+            </SfButton>
           </div>
         </div>
         <div>
@@ -49,24 +51,26 @@
             {{ $t('Size guide') }}
           </SfButton>
           <SfSelect
-            v-e2e="'size-select'"
             v-if="options.size"
+            v-e2e="'size-select'"
             :value="configuration.size"
-            @input="size => updateFilter({ size })"
             label="Size"
             class="sf-select--underlined product__select-size"
             :required="true"
+            @input="size => updateFilter({ size })"
           >
             <SfSelectOption
               v-for="size in options.size"
               :key="size.value"
               :value="size.value"
             >
-              {{size.label}}
+              {{ size.label }}
             </SfSelectOption>
           </SfSelect>
           <div v-if="options.color && options.color.length > 1" class="product__colors desktop-only">
-            <p class="product__color-label">{{ $t('Color') }}:</p>
+            <p class="product__color-label">
+              {{ $t('Color') }}:
+            </p>
             <SfColor
               v-for="(color, i) in options.color"
               :key="i"
@@ -84,8 +88,8 @@
               title="Click and Collect"
             >
               <SfSelect
-                v-e2e="'channel-select'"
                 v-model="channelId"
+                v-e2e="'channel-select'"
                 label="Select Channel"
                 class="sf-select--underlined product__select-size"
               >
@@ -94,17 +98,17 @@
                   :key="channel.id"
                   :value="channel.id"
                 >
-                  {{channel.name}}
+                  {{ channel.name }}
                 </SfSelectOption>
               </SfSelect>
             </SfTab>
           </SfTabs>
           <SfAddToCart
+            v-model="qty"
             v-e2e="'product_add-to-cart'"
             :stock="stock"
-            v-model="qty"
             :disabled="loading"
-            :canAddToCart="stock > 0"
+            :can-add-to-cart="stock > 0"
             class="product__add-to-cart"
             @click="addToCart"
           />
@@ -150,9 +154,13 @@
               class="product__additional-info"
             >
               <div class="product__additional-info">
-                <p class="product__additional-info__title">{{ $t('Brand') }}</p>
+                <p class="product__additional-info__title">
+                  {{ $t('Brand') }}
+                </p>
                 <p>{{ brand }}</p>
-                <p class="product__additional-info__title">{{ $t('Instruction1') }}</p>
+                <p class="product__additional-info__title">
+                  {{ $t('Instruction1') }}
+                </p>
                 <p class="product__additional-info__paragraph">
                   {{ $t('Instruction2') }}
                 </p>
@@ -178,7 +186,6 @@
     <LazyHydrate when-visible>
       <InstagramFeed />
     </LazyHydrate>
-
   </div>
 </template>
 <script>
@@ -200,11 +207,9 @@ import {
   SfBreadcrumbs,
   SfButton,
   SfColor
-} from '@storefront-ui/vue';
+} from '@storefront-ui/vue'
 
-import InstagramFeed from '~/components/InstagramFeed.vue';
-import RelatedProducts from '~/components/RelatedProducts.vue';
-import { ref, computed } from '@vue/composition-api';
+import { ref, computed } from '@vue/composition-api'
 import {
   useProduct,
   useCart,
@@ -212,10 +217,12 @@ import {
   useReview,
   reviewGetters,
   useStore
-} from '@vue-storefront/commercetools';
-import { onSSR } from '@vue-storefront/core';
-import LazyHydrate from 'vue-lazy-hydration';
-import cacheControl from './../helpers/cacheControl';
+} from '@vue-storefront/commercetools'
+import { onSSR } from '@vue-storefront/core'
+import LazyHydrate from 'vue-lazy-hydration'
+import cacheControl from './../helpers/cacheControl'
+import RelatedProducts from '~/components/RelatedProducts.vue'
+import InstagramFeed from '~/components/InstagramFeed.vue'
 
 export default {
   name: 'Product',
@@ -224,45 +231,47 @@ export default {
     'max-age': 60,
     'stale-when-revalidate': 5
   }),
-  setup(props, context) {
-    const qty = ref(1);
-    const { id } = context.root.$route.params;
-    const { products, search } = useProduct('products');
-    const { products: relatedProducts, search: searchRelatedProducts, loading: relatedLoading } = useProduct('relatedProducts');
-    const { addItem, loading } = useCart();
-    const { reviews: productReviews, search: searchReviews } = useReview('productReviews');
-    const { response: stores } = useStore();
+  setup (props, context) {
+    const qty = ref(1)
+    const { id } = context.root.$route.params
+    const { products, search } = useProduct('products')
+    const { products: relatedProducts, search: searchRelatedProducts, loading: relatedLoading } = useProduct('relatedProducts')
+    const { addItem, loading } = useCart()
+    const { reviews: productReviews, search: searchReviews } = useReview('productReviews')
+    const { response: stores } = useStore()
 
     // to be added on local useStore factory
-    function getSelected(stores) {
-      return stores.results?.find((result) => result.key === stores._selectedStore);
+    function getSelected (stores) {
+      return stores.results?.find(result => result.key === stores._selectedStore)
     }
 
-    const product = computed(() => productGetters.getFiltered(products.value, { master: true, attributes: context.root.$route.query })[0]);
-    const options = computed(() => productGetters.getAttributes(products.value, ['color', 'size']));
-    const configuration = computed(() => productGetters.getAttributes(product.value, ['color', 'size']));
-    const categories = computed(() => productGetters.getCategoryIds(product.value));
-    const reviews = computed(() => reviewGetters.getItems(productReviews.value));
-    const selectedStore = computed(() => getSelected(stores.value));
+    const product = computed(() => productGetters.getFiltered(products.value, { master: true, attributes: context.root.$route.query })[0])
+    const options = computed(() => productGetters.getAttributes(products.value, ['color', 'size']))
+    const configuration = computed(() => productGetters.getAttributes(product.value, ['color', 'size']))
+    const categories = computed(() => productGetters.getCategoryIds(product.value))
+    const reviews = computed(() => reviewGetters.getItems(productReviews.value))
+    const selectedStore = computed(() => getSelected(stores.value))
 
-    const channelId = ref(null);
+    const channelId = ref(null)
     const channels = computed(() => {
-      const productChannels = product.value?.availability?.channels?.results ?? [];
-      return productChannels;
-    });
+      const productChannels = product.value?.availability?.channels?.results ?? []
+      return productChannels
+    })
 
     const selectedChannel = computed(() => {
-      const selected = channels.value.find((item) => (item.channel.id === channelId.value));
+      const selected = channels.value.find(item => (item.channel.id === channelId.value))
 
-      return (selected?.channel?.roles && selected?.channel?.id) ? {
-        ...(selected.channel.roles.includes('InventorySupply') && { supplyChannel: selected.channel.id }),
-        ...(selected.channel.roles.includes('ProductDistribution') && { distributionChannel: selected.channel.id })
-      } : null;
-    });
+      return (selected?.channel?.roles && selected?.channel?.id)
+        ? {
+            ...(selected.channel.roles.includes('InventorySupply') && { supplyChannel: selected.channel.id }),
+            ...(selected.channel.roles.includes('ProductDistribution') && { distributionChannel: selected.channel.id })
+          }
+        : null
+    })
 
     const addToCart = () => {
-      addItem({ product: product.value, quantity: parseInt(qty.value), customQuery: selectedChannel.value });
-    };
+      addItem({ product: product.value, quantity: parseInt(qty.value), customQuery: selectedChannel.value })
+    }
 
     // TODO: Breadcrumbs are temporary disabled because productGetters return undefined. We have a mocks in data
     // const breadcrumbs = computed(() => productGetters.getBreadcrumbs ? productGetters.getBreadcrumbs(product.value) : props.fallbackBreadcrumbs);
@@ -271,13 +280,13 @@ export default {
       desktop: { url: img.normal },
       big: { url: img.big },
       alt: product.value._name || product.value.name
-    })));
+    })))
 
     onSSR(async () => {
-      await search({ id });
-      await searchRelatedProducts({ catId: [categories.value[0]], limit: 8 });
-      await searchReviews({ productId: id });
-    });
+      await search({ id })
+      await searchRelatedProducts({ catId: [categories.value[0]], limit: 8 })
+      await searchReviews({ productId: id })
+    })
 
     const updateFilter = (filter) => {
       context.root.$router.push({
@@ -286,8 +295,8 @@ export default {
           ...configuration.value,
           ...filter
         }
-      });
-    };
+      })
+    }
 
     return {
       addToCart,
@@ -310,7 +319,7 @@ export default {
       channelId,
       selectedChannel,
       selectedStore
-    };
+    }
   },
   components: {
     SfAlert,
@@ -334,7 +343,7 @@ export default {
     RelatedProducts,
     LazyHydrate
   },
-  data() {
+  data () {
     return {
       stock: 5,
       properties: [
@@ -380,9 +389,9 @@ export default {
           }
         }
       ]
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

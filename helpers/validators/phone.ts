@@ -1,3 +1,4 @@
+// used in ShippingAddessForm.vue, BillingAddressForm.vue, Shipping.vue, Billing.vue
 import { extend } from 'vee-validate';
 import PhoneNumber from 'awesome-phonenumber';
 

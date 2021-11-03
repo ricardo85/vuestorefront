@@ -17,9 +17,9 @@
     <!-- Password reset -->
     <SfTab title="Password change">
       <p class="message">
-        {{ $t('Change password your account') }}:<br />
+        {{ $t('Change password your account') }}:<br>
         {{ $t('Your current email address is') }}
-        <span class="message__label">{{currentEmail}}</span>
+        <span class="message__label">{{ currentEmail }}</span>
       </p>
 
       <PasswordResetForm @submit="updatePassword" />
@@ -28,37 +28,37 @@
 </template>
 
 <script>
-import { extend } from 'vee-validate';
-import { email, required, min, confirmed } from 'vee-validate/dist/rules';
-import ProfileUpdateForm from '~/components/MyAccount/ProfileUpdateForm';
-import PasswordResetForm from '~/components/MyAccount/PasswordResetForm';
-import { SfTabs, SfInput, SfButton } from '@storefront-ui/vue';
-import { useUser, userGetters } from '@vue-storefront/commercetools';
+import { extend } from 'vee-validate'
+import { email, required, min, confirmed } from 'vee-validate/dist/rules'
+import { SfTabs, SfInput, SfButton } from '@storefront-ui/vue'
+import { useUser, userGetters } from '@vue-storefront/commercetools'
+import ProfileUpdateForm from '~/components/MyAccount/ProfileUpdateForm'
+import PasswordResetForm from '~/components/MyAccount/PasswordResetForm'
 
 extend('email', {
   ...email,
   message: 'Invalid email'
-});
+})
 
 extend('required', {
   ...required,
   message: 'This field is required'
-});
+})
 
 extend('min', {
   ...min,
   message: 'The field should have at least {length} characters'
-});
+})
 
 extend('password', {
   validate: value => String(value).length >= 8 && String(value).match(/[A-Za-z]/gi) && String(value).match(/[0-9]/gi),
   message: 'Password must have at least 8 characters including one letter and a number'
-});
+})
 
 extend('confirmed', {
   ...confirmed,
   message: 'Passwords don\'t match'
-});
+})
 
 export default {
   name: 'PersonalDetails',
@@ -71,30 +71,30 @@ export default {
     PasswordResetForm
   },
 
-  setup() {
-    const { updateUser, changePassword, user } = useUser();
+  setup () {
+    const { updateUser, changePassword, user } = useUser()
 
-    const currentEmail = userGetters.getEmailAddress(user.value);
+    const currentEmail = userGetters.getEmailAddress(user.value)
 
     const formHandler = async (fn, onComplete, onError) => {
       try {
-        const data = await fn();
-        await onComplete(data);
+        const data = await fn()
+        await onComplete(data)
       } catch (error) {
-        onError(error);
+        onError(error)
       }
-    };
+    }
 
-    const updatePersonalData = ({ form, onComplete, onError }) => formHandler(() => updateUser({ user: form.value }), onComplete, onError);
-    const updatePassword = ({ form, onComplete, onError }) => formHandler(() => changePassword({ current: form.value.currentPassword, new: form.value.newPassword }), onComplete, onError);
+    const updatePersonalData = ({ form, onComplete, onError }) => formHandler(() => updateUser({ user: form.value }), onComplete, onError)
+    const updatePassword = ({ form, onComplete, onError }) => formHandler(() => changePassword({ current: form.value.currentPassword, new: form.value.newPassword }), onComplete, onError)
 
     return {
       currentEmail,
       updatePersonalData,
       updatePassword
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang='scss' scoped>

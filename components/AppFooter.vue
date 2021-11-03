@@ -5,7 +5,7 @@
         <SfListItem
           v-for="item in aboutUs"
           :key="item"
-          >
+        >
           <SfMenuItem
             :label="$t(item)"
           />
@@ -50,14 +50,22 @@
     </SfFooterColumn>
     <SfFooterColumn title="Social">
       <div class="footer__socials">
-        <SfImage class="footer__social-image" v-for="item in social" :key="item" :src="'/icons/'+item+'.svg'" :alt="item" width="32" height="32" />
+        <SfImage
+          v-for="item in social"
+          :key="item"
+          class="footer__social-image"
+          :src="'/icons/'+item+'.svg'"
+          :alt="item"
+          width="32"
+          height="32"
+        />
       </div>
     </SfFooterColumn>
   </SfFooter>
 </template>
 
 <script>
-import { SfFooter, SfList, SfImage, SfMenuItem } from '@storefront-ui/vue';
+import { SfFooter, SfList, SfImage, SfMenuItem } from '@storefront-ui/vue'
 
 export default {
   components: {
@@ -66,7 +74,7 @@ export default {
     SfImage,
     SfMenuItem
   },
-  data() {
+  data () {
     return {
       aboutUs: ['Who we are', 'Quality in the details', 'Customer Reviews'],
       departments: ['Women fashion', 'Men fashion', 'Kidswear', 'Home'],
@@ -75,9 +83,9 @@ export default {
       social: ['facebook', 'pinterest', 'google', 'twitter', 'youtube'],
       isMobile: false,
       desktopMin: 1024
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang="scss">

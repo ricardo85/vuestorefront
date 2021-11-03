@@ -1,3 +1,4 @@
+// hooked as middleware (?) to e.g. Category.vue
 const cacheControl = (values) => ({ res }) => {
   if (!process.server) return;
 

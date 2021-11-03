@@ -11,12 +11,14 @@
         <div class="accordion__item">
           <div class="accordion__content">
             <p class="content">
-              <span class="content__label" v-if="chosenShippingMethod">{{ chosenShippingMethod.name }}</span><br />
+              <span v-if="chosenShippingMethod" class="content__label">{{ chosenShippingMethod.name }}</span><br>
               {{ shippingDetails.streetName }} {{ shippingDetails.apartment }},
-              {{ shippingDetails.zipCode }}<br />
+              {{ shippingDetails.zipCode }}<br>
               {{ shippingDetails.city }}, {{ shippingDetails.country }}
             </p>
-            <p class="content">{{ shippingDetails.phoneNumber }}</p>
+            <p class="content">
+              {{ shippingDetails.phoneNumber }}
+            </p>
           </div>
           <SfButton class="sf-button--text accordion__edit" @click="$emit('click:edit', 1)">
             {{ $t('Edit') }}
@@ -31,12 +33,14 @@
             </p>
             <template v-else>
               <p class="content">
-                <span class="content__label">{{ chosenPaymentMethod.label }}</span><br />
+                <span class="content__label">{{ chosenPaymentMethod.label }}</span><br>
                 {{ billingDetails.streetName }} {{ billingDetails.apartment }},
-                {{ billingDetails.zipCode }}<br />
+                {{ billingDetails.zipCode }}<br>
                 {{ billingDetails.city }}, {{ billingDetails.country }}
               </p>
-              <p class="content">{{ billingDetails.phoneNumber }}</p>
+              <p class="content">
+                {{ billingDetails.phoneNumber }}
+              </p>
             </template>
           </div>
           <SfButton class="sf-button--text accordion__edit" @click="$emit('click:edit', 2)">
@@ -52,11 +56,15 @@
         :label="$t('Enter promo code')"
         class="sf-input--filled promo-code__input"
       />
-      <SfButton class="promo-code__button" @click="() => applyCoupon({ couponCode: promoCode })">{{ $t('Apply') }}</SfButton>
+      <SfButton class="promo-code__button" @click="() => applyCoupon({ couponCode: promoCode })">
+        {{ $t('Apply') }}
+      </SfButton>
     </div>
     <SfTable class="sf-table--bordered table desktop-only">
       <SfTableHeading class="table__row">
-        <SfTableHeader class="table__header table__image">{{ $t('Item') }}</SfTableHeader>
+        <SfTableHeader class="table__header table__image">
+          {{ $t('Item') }}
+        </SfTableHeader>
         <SfTableHeader
           v-for="tableHeader in tableHeaders"
           :key="tableHeader"
@@ -68,24 +76,32 @@
       </SfTableHeading>
       <SfTableRow
         v-for="(product, index) in products"
-        v-e2e="'product-row'"
         :key="index"
+        v-e2e="'product-row'"
         class="table__row"
       >
         <SfTableData class="table__image">
           <SfImage :src="cartGetters.getItemImage(product)" :alt="cartGetters.getItemName(product)" />
         </SfTableData>
         <SfTableData v-e2e="'product-title-sku'" class="table__data table__description table__data">
-          <div class="product-title">{{ cartGetters.getItemName(product) }}</div>
-          <div class="product-sku">{{ cartGetters.getItemSku(product) }}</div>
+          <div class="product-title">
+            {{ cartGetters.getItemName(product) }}
+          </div>
+          <div class="product-sku">
+            {{ cartGetters.getItemSku(product) }}
+          </div>
         </SfTableData>
         <SfTableData
-          class="table__data" v-e2e="'product-attributes'" v-for="(value, key) in cartGetters.getItemAttributes(product, ['size', 'color'])"
+          v-for="(value, key) in cartGetters.getItemAttributes(product, ['size', 'color'])"
           :key="key"
+          v-e2e="'product-attributes'"
+          class="table__data"
         >
           {{ value }}
         </SfTableData>
-        <SfTableData v-e2e="'product-quantity'" class="table__data">{{ cartGetters.getItemQty(product) }}</SfTableData>
+        <SfTableData v-e2e="'product-quantity'" class="table__data">
+          {{ cartGetters.getItemQty(product) }}
+        </SfTableData>
         <SfTableData v-e2e="'product-price'" class="table__data price">
           <SfPrice
             :regular="$n(cartGetters.getItemPrice(product).regular, 'currency')"
@@ -104,28 +120,30 @@
             class="sf-property--full-width property"
           />
           <SfProperty
-            :name="$t('Shipping')"
             v-if="chosenShippingMethod && chosenShippingMethod.zoneRates"
+            :name="$t('Shipping')"
             :value="$n(getShippingMethodPrice(chosenShippingMethod, totals.total), 'currency')"
             class="sf-property--full-width property"
           />
         </div>
-        <SfDivider class="divider"/>
+        <SfDivider class="divider" />
         <SfProperty
           :name="$t('Total price')"
           :value="$n(totals.total, 'currency')"
           class="sf-property--full-width sf-property--large property summary__property-total"
         />
         <VsfPaymentProviderMock />
-        <SfCheckbox v-e2e="'terms'" v-model="terms" name="terms" class="summary__terms">
+        <SfCheckbox v-model="terms" v-e2e="'terms'" name="terms" class="summary__terms">
           <template #label>
             <div class="sf-checkbox__label">
-              {{ $t('I agree to') }} <SfLink href="#"> {{ $t('Terms and conditions') }}</SfLink>
+              {{ $t('I agree to') }} <SfLink href="#">
+                {{ $t('Terms and conditions') }}
+              </SfLink>
             </div>
           </template>
         </SfCheckbox>
-          <div class="summary__action">
-          <SfButton v-e2e="'make-an-order'" class="summary__action-button" @click="processOrder" :disabled="loading || !paymentReady || !terms">
+        <div class="summary__action">
+          <SfButton v-e2e="'make-an-order'" class="summary__action-button" :disabled="loading || !paymentReady || !terms" @click="processOrder">
             {{ $t('Make an order') }}
           </SfButton>
           <nuxt-link to="/checkout/billing" class="sf-button sf-button--underlined summary__back-button smartphone-only">
@@ -151,14 +169,14 @@ import {
   SfAccordion,
   SfLink,
   SfInput
-} from '@storefront-ui/vue';
-import { ref, computed, watch } from '@vue/composition-api';
-import { useMakeOrder, useCart, useBilling, useShipping, useShippingProvider, cartGetters } from '@vue-storefront/commercetools';
-import { onSSR } from '@vue-storefront/core';
-import getShippingMethodPrice from '@/helpers/Checkout/getShippingMethodPrice';
-import VsfPaymentProviderMock from '@/components/Checkout/VsfPaymentProviderMock';
-import { usePaymentProviderMock } from '@/composables/usePaymentProviderMock';
-import { useUiNotification } from '~/composables';
+} from '@storefront-ui/vue'
+import { ref, computed, watch } from '@vue/composition-api'
+import { useMakeOrder, useCart, useBilling, useShipping, useShippingProvider, cartGetters } from '@vue-storefront/commercetools'
+import { onSSR } from '@vue-storefront/core'
+import getShippingMethodPrice from '@/helpers/Checkout/getShippingMethodPrice'
+import VsfPaymentProviderMock from '@/components/Checkout/VsfPaymentProviderMock'
+import { usePaymentProviderMock } from '@/composables/usePaymentProviderMock'
+import { useUiNotification } from '~/composables'
 
 export default {
   name: 'ReviewOrder',
@@ -177,43 +195,42 @@ export default {
     VsfPaymentProviderMock,
     SfInput
   },
-  setup(_, context) {
-    const { status: paymentReady } = usePaymentProviderMock();
-    const { cart, removeItem, load, setCart, applyCoupon } = useCart();
-    const { shipping: shippingDetails, load: loadShippingDetails } = useShipping();
-    const { load: loadShippingProvider, state } = useShippingProvider();
-    const { billing: billingDetails, load: loadBillingDetails } = useBilling();
-    const billingSameAsShipping = computed(() => Object.keys(shippingDetails.value).every(shippingDetailsKey => shippingDetails.value[shippingDetailsKey] === billingDetails.value[shippingDetailsKey]));
-    const products = computed(() => cartGetters.getItems(cart.value));
-    const totals = computed(() => cartGetters.getTotals(cart.value));
-    const { order, make, loading, error } = useMakeOrder();
-    const { send } = useUiNotification();
+  setup (_, context) {
+    const { status: paymentReady } = usePaymentProviderMock()
+    const { cart, removeItem, load, setCart, applyCoupon } = useCart()
+    const { shipping: shippingDetails, load: loadShippingDetails } = useShipping()
+    const { load: loadShippingProvider, state } = useShippingProvider()
+    const { billing: billingDetails, load: loadBillingDetails } = useBilling()
+    const billingSameAsShipping = computed(() => Object.keys(shippingDetails.value).every(shippingDetailsKey => shippingDetails.value[shippingDetailsKey] === billingDetails.value[shippingDetailsKey]))
+    const products = computed(() => cartGetters.getItems(cart.value))
+    const totals = computed(() => cartGetters.getTotals(cart.value))
+    const { order, make, loading, error } = useMakeOrder()
+    const { send } = useUiNotification()
 
-    const terms = ref(false);
-    const promoCode = ref('');
+    const terms = ref(false)
+    const promoCode = ref('')
 
     onSSR(async () => {
-      await load();
-      await loadShippingDetails();
-      await loadBillingDetails();
-      await loadShippingProvider();
-    });
+      await load()
+      await loadShippingDetails()
+      await loadBillingDetails()
+      await loadShippingProvider()
+    })
 
     const processOrder = async () => {
-      await make();
+      await make()
 
-      if (error.value.make) return;
+      if (error.value.make) { return }
 
-      const thankYouPath = { name: 'thank-you', query: { order: order.value.id }};
-      context.root.$router.push(context.root.localePath(thankYouPath));
+      const thankYouPath = { name: 'thank-you', query: { order: order.value.id } }
+      context.root.$router.push(context.root.localePath(thankYouPath))
 
-      setCart(null);
-    };
+      setCart(null)
+    }
 
-    watch(() => ({...error.value}), (error, prevError) => {
-      if (error.make !== prevError.make)
-        send({ type: 'danger', message: error.make.message });
-    });
+    watch(() => ({ ...error.value }), (error, prevError) => {
+      if (error.make !== prevError.make) { send({ type: 'danger', message: error.make.message }) }
+    })
 
     return {
       loading,
@@ -233,9 +250,9 @@ export default {
       paymentReady,
       promoCode,
       applyCoupon
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

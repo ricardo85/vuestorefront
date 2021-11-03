@@ -27,12 +27,12 @@ export default {
       },
       {
         rel: 'preload',
-        href: 'https://fonts.googleapis.com/css?family=Raleway:300,400,400i,500,600,700|Roboto:300,300i,400,400i,500,700&display=swap',
+        href: 'https://fonts.googleapis.com/css?family=Raleway:300,400,400i,500,600,700|Montserrat:300,400,500&display=swap',
         as: 'style'
       },
       {
         rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css?family=Raleway:300,400,400i,500,600,700|Roboto:300,300i,400,400i,500,700&display=swap',
+        href: 'https://fonts.googleapis.com/css?family=Raleway:300,400,400i,500,600,700|Montserrat:300,400,500&display=swap',
         media: 'print',
         onload: 'this.media=\'all\'',
         once: true
@@ -122,7 +122,10 @@ export default {
     }
   },
   styleResources: {
-    scss: [require.resolve('@storefront-ui/shared/styles/_helpers.scss', { paths: [process.cwd()] })]
+    scss: [
+      require.resolve('@storefront-ui/shared/styles/_helpers.scss', { paths: [process.cwd()] })
+      //require.resolve('./assets/css/main.scss', { paths: [process.cwd()] })
+    ]
   },
   publicRuntimeConfig: {
     theme

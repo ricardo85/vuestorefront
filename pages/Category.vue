@@ -10,7 +10,8 @@
           <SfHeading
             :level="3"
             :title="$t('Categories')"
-            class="navbar__title" />
+            class="navbar__title"
+          />
         </LazyHydrate>
       </div>
 
@@ -45,8 +46,9 @@
                 :key="option.id"
                 :value="option.id"
                 class="sort-by__option"
-                >{{ option.value }}</SfSelectOption
               >
+                {{ option.value }}
+              </SfSelectOption>
             </SfSelect>
           </LazyHydrate>
         </div>
@@ -89,8 +91,9 @@
       <div class="sidebar desktop-only">
         <LazyHydrate when-idle>
           <SfLoader
-          :class="{ 'loading--categories': loading }"
-          :loading="loading">
+            :class="{ 'loading--categories': loading }"
+            :loading="loading"
+          >
             <SfAccordion
               :open="activeCategory"
               :show-chevron="true"
@@ -118,9 +121,9 @@
                       </SfMenuItem>
                     </SfListItem>
                     <SfListItem
-                      class="list__item"
                       v-for="(subCat, j) in cat.items"
                       :key="j"
+                      class="list__item"
                     >
                       <SfMenuItem
                         :count="subCat.count || ''"
@@ -144,7 +147,7 @@
         </LazyHydrate>
       </div>
       <SfLoader :class="{ loading }" :loading="loading">
-        <div class="products" v-if="!loading">
+        <div v-if="!loading" class="products">
           <transition-group
             v-if="isCategoryGridView"
             appear
@@ -153,9 +156,9 @@
             class="products__grid"
           >
             <SfProductCard
-              v-e2e="'category-product-card'"
               v-for="(product, i) in products"
               :key="productGetters.getSlug(product)"
+              v-e2e="'category-product-card'"
               :style="{ '--index': i }"
               :title="productGetters.getName(product)"
               :image="productGetters.getCoverImage(product)"
@@ -164,8 +167,8 @@
               :max-rating="5"
               :score-rating="productGetters.getAverageRating(product)"
               :show-add-to-cart-button="true"
-              :isOnWishlist="isInWishlist({ product })"
-              :isAddedToCart="isInCart({ product })"
+              :is-on-wishlist="isInWishlist({ product })"
+              :is-added-to-cart="isInCart({ product })"
               :link="localePath(`/p/${productGetters.getId(product)}/${productGetters.getSlug(product)}`)"
               class="products__product-card"
               @click:wishlist="!isInWishlist({ product }) ? addItemToWishlist({ product }) : removeItemFromWishlist({ product })"
@@ -180,9 +183,9 @@
             class="products__list"
           >
             <SfProductCardHorizontal
-              v-e2e="'category-product-card'"
               v-for="(product, i) in products"
               :key="productGetters.getSlug(product)"
+              v-e2e="'category-product-card'"
               :style="{ '--index': i }"
               :title="productGetters.getName(product)"
               :description="productGetters.getDescription(product)"
@@ -191,11 +194,11 @@
               :special-price="productGetters.getPrice(product).special && $n(productGetters.getPrice(product).special, 'currency')"
               :max-rating="5"
               :score-rating="3"
-              :isOnWishlist="isInWishlist({ product })"
+              :is-on-wishlist="isInWishlist({ product })"
               class="products__product-card-horizontal"
+              :link="localePath(`/p/${productGetters.getId(product)}/${productGetters.getSlug(product)}`)"
               @click:wishlist="!isInWishlist({ product }) ? addItemToWishlist({ product }) : removeItemFromWishlist({ product })"
               @click:add-to-cart="addItemToCart({ product, quantity: 1 })"
-              :link="localePath(`/p/${productGetters.getId(product)}/${productGetters.getSlug(product)}`)"
             >
               <template #configuration>
                 <SfProperty
@@ -221,8 +224,8 @@
           <LazyHydrate on-interaction>
             <SfPagination
               v-if="!loading"
-              class="products__pagination desktop-only"
               v-show="pagination.totalPages > 1"
+              class="products__pagination desktop-only"
               :current="pagination.currentPage"
               :total="pagination.totalPages"
               :visible="5"
@@ -265,35 +268,35 @@
         <div class="filters desktop-only">
           <div v-for="(facet, i) in facets" :key="i">
             <SfHeading
+              :key="`filter-title-${facet.id}`"
               :level="4"
               :title="facet.label"
               class="filters__title sf-heading--left"
-              :key="`filter-title-${facet.id}`"
             />
-              <div
-                v-if="isFacetColor(facet)"
-                class="filters__colors"
-                :key="`${facet.id}-colors`"
-              >
-                <SfColor
-                  v-for="option in facet.options"
-                  :key="`${facet.id}-${option.value}`"
-                  :color="option.value"
-                  :selected="isFilterSelected(facet, option)"
-                  class="filters__color"
-                  @click="() => selectFilter(facet, option)"
-                />
-              </div>
-              <div v-else>
-                <SfFilter
-                  v-for="option in facet.options"
-                  :key="`${facet.id}-${option.value}`"
-                  :label="option.id + `${option.count ? ` (${option.count})` : ''}`"
-                  :selected="isFilterSelected(facet, option)"
-                  class="filters__item"
-                  @change="() => selectFilter(facet, option)"
-                />
-              </div>
+            <div
+              v-if="isFacetColor(facet)"
+              :key="`${facet.id}-colors`"
+              class="filters__colors"
+            >
+              <SfColor
+                v-for="option in facet.options"
+                :key="`${facet.id}-${option.value}`"
+                :color="option.value"
+                :selected="isFilterSelected(facet, option)"
+                class="filters__color"
+                @click="() => selectFilter(facet, option)"
+              />
+            </div>
+            <div v-else>
+              <SfFilter
+                v-for="option in facet.options"
+                :key="`${facet.id}-${option.value}`"
+                :label="option.id + `${option.count ? ` (${option.count})` : ''}`"
+                :selected="isFilterSelected(facet, option)"
+                class="filters__item"
+                @change="() => selectFilter(facet, option)"
+              />
+            </div>
           </div>
         </div>
         <SfAccordion class="filters smartphone-only">
@@ -303,29 +306,31 @@
               :header="facet.label"
               class="filters__accordion-item"
             >
-            <SfFilter
-              v-for="option in facet.options"
-              :key="`${facet.id}-${option.id}`"
-              :label="option.id"
-              :selected="isFilterSelected(facet, option)"
-              class="filters__item"
-              @change="() => selectFilter(facet, option)"
-            />
-          </SfAccordionItem>
-        </div>
+              <SfFilter
+                v-for="option in facet.options"
+                :key="`${facet.id}-${option.id}`"
+                :label="option.id"
+                :selected="isFilterSelected(facet, option)"
+                class="filters__item"
+                @change="() => selectFilter(facet, option)"
+              />
+            </SfAccordionItem>
+          </div>
         </SfAccordion>
         <template #content-bottom>
           <div class="filters__buttons">
             <SfButton
               class="sf-button--full-width"
               @click="applyFilters"
-              >{{ $t('Done') }}</SfButton
             >
+              {{ $t('Done') }}
+            </SfButton>
             <SfButton
               class="sf-button--full-width filters__button-clear"
               @click="clearFilters"
-              >{{ $t('Clear all') }}</SfButton
             >
+              {{ $t('Clear all') }}
+            </SfButton>
           </div>
         </template>
       </SfSidebar>
@@ -351,14 +356,14 @@ import {
   SfLoader,
   SfColor,
   SfProperty
-} from '@storefront-ui/vue';
-import { ref, computed, onMounted } from '@vue/composition-api';
-import { useCart, useWishlist, productGetters, useFacet, facetGetters } from '@vue-storefront/commercetools';
-import { useUiHelpers, useUiState } from '~/composables';
-import { onSSR } from '@vue-storefront/core';
-import LazyHydrate from 'vue-lazy-hydration';
-import Vue from 'vue';
-import cacheControl from './../helpers/cacheControl';
+} from '@storefront-ui/vue'
+import { ref, computed, onMounted } from '@vue/composition-api'
+import { useCart, useWishlist, productGetters, useFacet, facetGetters } from '@vue-storefront/commercetools'
+import { onSSR } from '@vue-storefront/core'
+import LazyHydrate from 'vue-lazy-hydration'
+import Vue from 'vue'
+import cacheControl from './../helpers/cacheControl'
+import { useUiHelpers, useUiState } from '~/composables'
 
 // TODO(addToCart qty, horizontal): https://github.com/vuestorefront/storefront-ui/issues/1606
 export default {
@@ -367,80 +372,80 @@ export default {
     'max-age': 60,
     'stale-when-revalidate': 5
   }),
-  setup(props, context) {
-    const th = useUiHelpers();
-    const uiState = useUiState();
-    const { addItem: addItemToCart, isInCart } = useCart();
-    const { addItem: addItemToWishlist, isInWishlist, removeItem: removeItemFromWishlist } = useWishlist();
-    const { result, search, loading } = useFacet();
+  setup (props, context) {
+    const th = useUiHelpers()
+    const uiState = useUiState()
+    const { addItem: addItemToCart, isInCart } = useCart()
+    const { addItem: addItemToWishlist, isInWishlist, removeItem: removeItemFromWishlist } = useWishlist()
+    const { result, search, loading } = useFacet()
 
-    const products = computed(() => facetGetters.getProducts(result.value));
-    const categoryTree = computed(() => facetGetters.getCategoryTree(result.value));
-    const breadcrumbs = computed(() => facetGetters.getBreadcrumbs(result.value));
-    const sortBy = computed(() => facetGetters.getSortOptions(result.value));
-    const facets = computed(() => facetGetters.getGrouped(result.value, ['color', 'size']));
-    const pagination = computed(() => facetGetters.getPagination(result.value));
+    const products = computed(() => facetGetters.getProducts(result.value))
+    const categoryTree = computed(() => facetGetters.getCategoryTree(result.value))
+    const breadcrumbs = computed(() => facetGetters.getBreadcrumbs(result.value))
+    const sortBy = computed(() => facetGetters.getSortOptions(result.value))
+    const facets = computed(() => facetGetters.getGrouped(result.value, ['color', 'size']))
+    const pagination = computed(() => facetGetters.getPagination(result.value))
     const activeCategory = computed(() => {
-      const items = categoryTree.value.items;
+      const items = categoryTree.value.items
 
       if (!items || !items.length) {
-        return '';
+        return ''
       }
 
-      const category = items.find(({ isCurrent, items }) => isCurrent || items.find(({ isCurrent }) => isCurrent));
+      const category = items.find(({ isCurrent, items }) => isCurrent || items.find(({ isCurrent }) => isCurrent))
 
-      return category?.label || items[0].label;
-    });
+      return category?.label || items[0].label
+    })
 
-    const selectedFilters = ref({});
+    const selectedFilters = ref({})
     const setSelectedFilters = () => {
-      if (!facets.value.length || Object.keys(selectedFilters.value).length) return;
+      if (!facets.value.length || Object.keys(selectedFilters.value).length) { return }
       selectedFilters.value = facets.value.reduce((prev, curr) => ({
         ...prev,
         [curr.id]: curr.options
           .filter(o => o.selected)
           .map(o => o.id)
-      }), {});
-    };
+      }), {})
+    }
 
     onSSR(async () => {
-      await search(th.getFacetsFromURL());
-      setSelectedFilters();
-    });
+      await search(th.getFacetsFromURL())
+      setSelectedFilters()
+    })
 
-    const { changeFilters, isFacetColor } = useUiHelpers();
-    const { toggleFilterSidebar } = useUiState();
+    const { changeFilters, isFacetColor } = useUiHelpers()
+    const { toggleFilterSidebar } = useUiState()
 
     onMounted(() => {
-      context.root.$scrollTo(context.root.$el, 2000);
-      setSelectedFilters();
-    });
+      context.root.$scrollTo(context.root.$el, 2000)
+      setSelectedFilters()
+    })
 
-    const isFilterSelected = (facet, option) => (selectedFilters.value[facet.id] || []).includes(option.id);
+    const isFilterSelected = (facet, option) => (selectedFilters.value[facet.id] || []).includes(option.id)
 
     const selectFilter = (facet, option) => {
       if (!selectedFilters.value[facet.id]) {
-        Vue.set(selectedFilters.value, facet.id, []);
+        Vue.set(selectedFilters.value, facet.id, [])
       }
 
       if (selectedFilters.value[facet.id].find(f => f === option.id)) {
-        selectedFilters.value[facet.id] = selectedFilters.value[facet.id].filter(f => f !== option.id);
-        return;
+        selectedFilters.value[facet.id] = selectedFilters.value[facet.id].filter(f => f !== option.id)
+        return
       }
 
-      selectedFilters.value[facet.id].push(option.id);
-    };
+      selectedFilters.value[facet.id].push(option.id)
+    }
 
     const clearFilters = () => {
-      toggleFilterSidebar();
-      selectedFilters.value = {};
-      changeFilters(selectedFilters.value);
-    };
+      toggleFilterSidebar()
+      selectedFilters.value = {}
+      changeFilters(selectedFilters.value)
+    }
 
     const applyFilters = () => {
-      toggleFilterSidebar();
-      changeFilters(selectedFilters.value);
-    };
+      toggleFilterSidebar()
+      changeFilters(selectedFilters.value)
+    }
 
     return {
       ...uiState,
@@ -465,7 +470,7 @@ export default {
       selectedFilters,
       clearFilters,
       applyFilters
-    };
+    }
   },
   components: {
     SfButton,
@@ -486,7 +491,7 @@ export default {
     SfProperty,
     LazyHydrate
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

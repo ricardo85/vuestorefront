@@ -1,10 +1,10 @@
 <template>
-  <div class="sf-header__navigation desktop" v-if="!isMobile">
+  <div v-if="!isMobile" class="sf-header__navigation desktop">
     <SfHeaderNavigationItem
       v-for="(category, index) in categories"
       :key="index"
-      class="nav-item"
       v-e2e="`app-header-url_${category}`"
+      class="nav-item"
       :label="category"
       :link="localePath(`/c/${category}`)"
     />
@@ -13,8 +13,8 @@
     <SfHeaderNavigationItem
       v-for="(category, index) in categories"
       :key="index"
-      class="nav-item"
       v-e2e="`app-header-url_${category}`"
+      class="nav-item"
     >
       <template #mobile-navigation-item>
         <SfMenuItem
@@ -29,8 +29,8 @@
 </template>
 
 <script>
-import { SfMenuItem, SfModal } from '@storefront-ui/vue';
-import { useUiState } from '~/composables';
+import { SfMenuItem, SfModal } from '@storefront-ui/vue'
+import { useUiState } from '~/composables'
 
 export default {
   name: 'HeaderNavigation',
@@ -44,17 +44,17 @@ export default {
       default: false
     }
   },
-  setup() {
-    const { isMobileMenuOpen, toggleMobileMenu } = useUiState();
-    const categories = ['women', 'men'];
+  setup () {
+    const { isMobileMenuOpen, toggleMobileMenu } = useUiState()
+    const categories = ['women', 'men']
 
     return {
       categories,
       isMobileMenuOpen,
       toggleMobileMenu
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

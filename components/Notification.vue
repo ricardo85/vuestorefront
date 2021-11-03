@@ -6,20 +6,20 @@
       :message="notification.message"
       :action="notification.action && notification.action.text"
       :type="notification.type"
+      visible
       @click:close="notification.dismiss"
       @click:action="notification.action && notification.action.onClick()"
-      visible
     >
-      <template #icon v-if="notification.icon">
-        <SfIcon :icon="notification.icon" color="white"/>
+      <template v-if="notification.icon" #icon>
+        <SfIcon :icon="notification.icon" color="white" />
       </template>
     </SfNotification>
   </transition-group>
 </template>
 
 <script>
-import { SfNotification, SfIcon } from '@storefront-ui/vue';
-import { useUiNotification } from '~/composables';
+import { SfNotification, SfIcon } from '@storefront-ui/vue'
+import { useUiNotification } from '~/composables'
 
 export default {
   name: 'Notification',
@@ -28,13 +28,13 @@ export default {
     SfIcon
   },
   setup () {
-    const { notifications } = useUiNotification();
+    const { notifications } = useUiNotification()
 
     return {
       notifications
-    };
+    }
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

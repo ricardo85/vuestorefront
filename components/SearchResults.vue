@@ -6,7 +6,7 @@
       class="search"
     >
       <transition name="sf-fade" mode="out-in">
-        <div v-if="products && products.length > 0" class="search__wrapper-results" key="results">
+        <div v-if="products && products.length > 0" key="results" class="search__wrapper-results">
           <SfMegaMenuColumn :title="$t('Categories')" class="sf-mega-menu-column--pined-content-on-mobile search__categories">
             <template #title="{title}">
               <SfMenuItem :label="title" @click="megaMenu.changeActive(title)">
@@ -65,14 +65,22 @@
             </div>
           </SfMegaMenuColumn>
           <div class="action-buttons smartphone-only">
-            <SfButton class="action-buttons__button color-light" @click="$emit('close')">{{ $t('Cancel') }}</SfButton>
+            <SfButton class="action-buttons__button color-light" @click="$emit('close')">
+              {{ $t('Cancel') }}
+            </SfButton>
           </div>
         </div>
         <div v-else key="no-results" class="before-results">
-          <SfImage src="/error/error.svg" class="before-results__picture" alt="error" loading="lazy"/>
-          <p class="before-results__paragraph">{{ $t('You haven’t searched for items yet') }}</p>
-          <p class="before-results__paragraph">{{ $t('Let’s start now – we’ll help you') }}</p>
-          <SfButton class="before-results__button color-secondary smartphone-only" @click="$emit('close')">{{ $t('Go back') }}</SfButton>
+          <SfImage src="/error/error.svg" class="before-results__picture" alt="error" loading="lazy" />
+          <p class="before-results__paragraph">
+            {{ $t('You haven’t searched for items yet') }}
+          </p>
+          <p class="before-results__paragraph">
+            {{ $t('Let’s start now – we’ll help you') }}
+          </p>
+          <SfButton class="before-results__button color-secondary smartphone-only" @click="$emit('close')">
+            {{ $t('Go back') }}
+          </SfButton>
         </div>
       </transition>
     </SfMegaMenu>
@@ -88,9 +96,9 @@ import {
   SfMenuItem,
   SfButton,
   SfImage
-} from '@storefront-ui/vue';
-import { ref, watch, computed } from '@vue/composition-api';
-import { productGetters } from '@vue-storefront/commercetools';
+} from '@storefront-ui/vue'
+import { ref, watch, computed } from '@vue/composition-api'
+import { productGetters } from '@vue-storefront/commercetools'
 
 export default {
   name: 'SearchResults',
@@ -113,29 +121,29 @@ export default {
       type: Object
     }
   },
-  setup(props, { emit }) {
-    const isSearchOpen = ref(props.visible);
-    const products = computed(() => props.result?.products);
-    const categories = computed(() => props.result?.categories);
+  setup (props, { emit }) {
+    const isSearchOpen = ref(props.visible)
+    const products = computed(() => props.result?.products)
+    const categories = computed(() => props.result?.categories)
 
     watch(() => props.visible, (newVal) => {
-      isSearchOpen.value = newVal;
+      isSearchOpen.value = newVal
       if (isSearchOpen.value) {
-        document.body.classList.add('no-scroll');
+        document.body.classList.add('no-scroll')
       } else {
-        document.body.classList.remove('no-scroll');
-        emit('removeSearchResults');
+        document.body.classList.remove('no-scroll')
+        emit('removeSearchResults')
       }
-    });
+    })
 
     return {
       isSearchOpen,
       productGetters,
       products,
       categories
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

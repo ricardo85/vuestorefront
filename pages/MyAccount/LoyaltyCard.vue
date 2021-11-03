@@ -3,10 +3,13 @@
     <SfTab title="Loyalty Card">
       <p class="message">
         This feature is not implemented yet! Please take a look at
-        <br />
-        <SfLink class="message__link" href="#"
-          >https://github.com/DivanteLtd/vue-storefront/issues </SfLink
+        <br>
+        <SfLink
+          class="message__link"
+          href="#"
         >
+          https://github.com/DivanteLtd/vue-storefront/issues
+        </SfLink>
         for our Roadmap!
       </p>
     </SfTab>
@@ -14,11 +17,11 @@
 </template>
 
 <script>
-import { SfTabs, SfLink } from '@storefront-ui/vue';
+import { SfTabs, SfLink } from '@storefront-ui/vue'
 export default {
   name: 'LoyalityCard',
   components: { SfTabs, SfLink }
-};
+}
 </script>
 
 <style lang='scss' scoped>

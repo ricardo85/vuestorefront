@@ -18,48 +18,50 @@
         </div>
       </SfLoader>
       <div class="form__radio-group">
-          <SfRadio
-            v-e2e="'shipping-method-label'"
-            v-for="method in shippingMethods"
-            :key="method.id"
-            :label="method.name"
-            :value="method.id"
-            :selected="selectedShippingMethod && selectedShippingMethod.shippingMethod && selectedShippingMethod.shippingMethod.id"
-            @input="selectShippingMethod(method)"
-            name="shippingMethod"
-            :description="method.localizedDescription"
-            class="form__radio shipping"
-          >
-            <template #label="{ label }">
-              <div class="sf-radio__label shipping__label">
-                <div>{{ label }}</div>
-                <div v-if="method && method.zoneRates">{{ $n(getShippingMethodPrice(method, totals.total), 'currency') }}</div>
+        <SfRadio
+          v-for="method in shippingMethods"
+          :key="method.id"
+          v-e2e="'shipping-method-label'"
+          :label="method.name"
+          :value="method.id"
+          :selected="selectedShippingMethod && selectedShippingMethod.shippingMethod && selectedShippingMethod.shippingMethod.id"
+          name="shippingMethod"
+          :description="method.localizedDescription"
+          class="form__radio shipping"
+          @input="selectShippingMethod(method)"
+        >
+          <template #label="{ label }">
+            <div class="sf-radio__label shipping__label">
+              <div>{{ label }}</div>
+              <div v-if="method && method.zoneRates">
+                {{ $n(getShippingMethodPrice(method, totals.total), 'currency') }}
               </div>
-            </template>
-            <template #description="{ localizedDescription }">
-              <div class="sf-radio__description shipping__description">
-                <div class="shipping__info">
-                  {{ localizedDescription }}
-                </div>
+            </div>
+          </template>
+          <template #description="{ localizedDescription }">
+            <div class="sf-radio__description shipping__description">
+              <div class="shipping__info">
+                {{ localizedDescription }}
               </div>
-            </template>
-          </SfRadio>
-        </div>
+            </div>
+          </template>
+        </SfRadio>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { useCart, useShippingProvider, cartGetters } from '@vue-storefront/commercetools';
+import { useCart, useShippingProvider, cartGetters } from '@vue-storefront/commercetools'
 import {
   SfHeading,
   SfButton,
   SfRadio,
   SfLoader
-} from '@storefront-ui/vue';
-import { ref, reactive, onMounted, computed } from '@vue/composition-api';
-import getShippingMethodPrice from '@/helpers/Checkout/getShippingMethodPrice';
-import { useVSFContext } from '@vue-storefront/core';
+} from '@storefront-ui/vue'
+import { ref, reactive, onMounted, computed } from '@vue/composition-api'
+import { useVSFContext } from '@vue-storefront/core'
+import getShippingMethodPrice from '@/helpers/Checkout/getShippingMethodPrice'
 
 export default {
   name: 'VsfShippingProvider',
@@ -102,10 +104,10 @@ export default {
     }
   },
   setup (props) {
-    const loading = ref(false);
-    const shippingMethods = ref([]);
-    const { $ct } = useVSFContext();
-    const { cart } = useCart();
+    const loading = ref(false)
+    const shippingMethods = ref([])
+    const { $ct } = useVSFContext()
+    const { cart } = useCart()
     const {
       state,
       setState,
@@ -113,63 +115,63 @@ export default {
       load,
       error: errorShippingProvider,
       loading: loadingShippingProvider
-    } = useShippingProvider();
-    const selectedShippingMethod = computed(() => state.value && state.value.response);
-    const totals = computed(() => cartGetters.getTotals(cart.value));
+    } = useShippingProvider()
+    const selectedShippingMethod = computed(() => state.value && state.value.response)
+    const totals = computed(() => cartGetters.getTotals(cart.value))
 
     const error = reactive({
       loadMethods: null
-    });
+    })
 
     const loadMethods = async () => {
       try {
-        error.loadMethods = null;
-        const shippingMethodsResponse = await $ct.api.getShippingMethods(cart.value.id);
-        return shippingMethodsResponse.data;
+        error.loadMethods = null
+        const shippingMethodsResponse = await $ct.api.getShippingMethods(cart.value.id)
+        return shippingMethodsResponse.data
       } catch (err) {
-        error.loadMethods = err;
+        error.loadMethods = err
         await props.onError({
           action: 'loadMethods',
           error: error.loadMethods
-        });
+        })
       }
-    };
+    }
 
-    const selectShippingMethod = async shippingMethod => {
+    const selectShippingMethod = async (shippingMethod) => {
       if (loadingShippingProvider.value) {
-        return;
+        return
       }
-      const interceptedShippingMethod = await props.beforeSelect(shippingMethod);
-      await save({ shippingMethod: interceptedShippingMethod });
+      const interceptedShippingMethod = await props.beforeSelect(shippingMethod)
+      await save({ shippingMethod: interceptedShippingMethod })
       if (errorShippingProvider.value.save) {
         setState({
           ...(state.value ? state.value : {}),
           _status: false
-        });
+        })
         await props.onError({
           action: 'selectShippingMethod',
           error: errorShippingProvider.value.save
-        });
-        return;
+        })
+        return
       }
-      await props.afterSelect(selectedShippingMethod.value);
+      await props.afterSelect(selectedShippingMethod.value)
       setState({
         ...(state.value ? state.value : {}),
         _status: true
-      });
-    };
+      })
+    }
 
     onMounted(async () => {
-      loading.value = true;
-      await props.beforeLoad();
-      const shippingMethodsResponse = await loadMethods();
+      loading.value = true
+      await props.beforeLoad()
+      const shippingMethodsResponse = await loadMethods()
       if (error.loadMethods) {
-        return;
+        return
       }
-      await load();
-      shippingMethods.value = await props.afterLoad(shippingMethodsResponse);
-      loading.value = false;
-    });
+      await load()
+      shippingMethods.value = await props.afterLoad(shippingMethodsResponse)
+      loading.value = false
+    })
 
     return {
       shippingMethods,
@@ -183,9 +185,9 @@ export default {
       error,
       errorShippingProvider,
       state
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

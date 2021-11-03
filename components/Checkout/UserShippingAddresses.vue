@@ -2,13 +2,13 @@
   <div>
     <SfAddressPicker
       :selected="currentAddressId"
-      @change="setCurrentAddress($event)"
       class="shipping-addresses"
+      @change="setCurrentAddress($event)"
     >
       <SfAddress
-        class="shipping-addresses__address"
         v-for="shippingAddress in shippingAddresses"
         :key="userShippingGetters.getId(shippingAddress)"
+        class="shipping-addresses__address"
         :name="String(userShippingGetters.getId(shippingAddress))"
       >
         <UserShippingAddress :address="shippingAddress" />
@@ -17,10 +17,10 @@
     <SfCheckbox
       v-show="currentAddressId"
       :selected="value"
-      @change="$emit('input', $event)"
       name="setAsDefault"
       label="Use this address as my default one."
       class="shipping-address-setAsDefault"
+      @change="$emit('input', $event)"
     />
   </div>
 </template>
@@ -29,12 +29,17 @@
 import {
   SfCheckbox,
   SfAddressPicker
-} from '@storefront-ui/vue';
-import UserShippingAddress from '~/components/UserShippingAddress';
-import { useUserShipping, userShippingGetters } from '@vue-storefront/commercetools';
+} from '@storefront-ui/vue'
+import { useUserShipping, userShippingGetters } from '@vue-storefront/commercetools'
+import UserShippingAddress from '~/components/UserShippingAddress'
 
 export default {
   name: 'UserShippingAddresses',
+  components: {
+    SfCheckbox,
+    SfAddressPicker,
+    UserShippingAddress
+  },
   props: {
     currentAddressId: {
       type: String | Number,
@@ -45,29 +50,24 @@ export default {
       required: true
     }
   },
-  components: {
-    SfCheckbox,
-    SfAddressPicker,
-    UserShippingAddress
-  },
   setup (_, { emit }) {
-    const { shipping: userShipping } = useUserShipping();
+    const { shipping: userShipping } = useUserShipping()
 
     const setCurrentAddress = async (addressId) => {
-      const selectedAddress = userShippingGetters.getAddresses(userShipping.value, { id: addressId });
+      const selectedAddress = userShippingGetters.getAddresses(userShipping.value, { id: addressId })
       if (!selectedAddress || !selectedAddress.length) {
-        return;
+        return
       }
-      emit('setCurrentAddress', selectedAddress[0]);
-    };
+      emit('setCurrentAddress', selectedAddress[0])
+    }
 
     return {
       shippingAddresses: userShippingGetters.getAddresses(userShipping.value),
       setCurrentAddress,
       userShippingGetters
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang="scss">

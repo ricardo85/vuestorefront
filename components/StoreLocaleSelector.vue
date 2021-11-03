@@ -9,7 +9,8 @@
     <SfBottomModal
       :is-open="isLangModalOpen"
       :title="availableStores.length > 0 ? 'Choose store': ''"
-      @click:close="isLangModalOpen = !isLangModalOpen">
+      @click:close="isLangModalOpen = !isLangModalOpen"
+    >
       <SfList>
         <SfListItem v-for="store in availableStores" :key="store.id">
           <a
@@ -62,10 +63,10 @@ import {
   SfImage,
   SfList,
   SfSelect
-} from '@storefront-ui/vue';
-import { onSSR } from '@vue-storefront/core';
-import { useStore, useCart } from '@vue-storefront/commercetools';
-import { ref, computed } from '@vue/composition-api';
+} from '@storefront-ui/vue'
+import { onSSR } from '@vue-storefront/core'
+import { useStore, useCart } from '@vue-storefront/commercetools'
+import { ref, computed } from '@vue/composition-api'
 
 export default {
   components: {
@@ -77,33 +78,33 @@ export default {
     SfList,
     SfSelect
   },
-  setup(props, context) {
-    const { locales, locale, defaultLocale } = context.root.$i18n;
-    const { load, change, response } = useStore();
-    const { clear, cart } = useCart();
-    const isLangModalOpen = ref(false);
-    const availableLocales = computed(() => locales.filter(i => i.code !== locale));
+  setup (props, context) {
+    const { locales, locale, defaultLocale } = context.root.$i18n
+    const { load, change, response } = useStore()
+    const { clear, cart } = useCart()
+    const isLangModalOpen = ref(false)
+    const availableLocales = computed(() => locales.filter(i => i.code !== locale))
 
     onSSR(async () => {
-      await load();
-    });
+      await load()
+    })
 
     // to be added on local useStore factory
-    function getSelected(stores) {
-      return stores.results?.find((result) => result.key === stores._selectedStore);
+    function getSelected (stores) {
+      return stores.results?.find(result => result.key === stores._selectedStore)
     }
 
-    const availableStores = computed(() => response.value?.results ?? []);
-    const selectedStore = computed(() => getSelected(response.value));
+    const availableStores = computed(() => response.value?.results ?? [])
+    const selectedStore = computed(() => getSelected(response.value))
 
     const changeStore = async (store) => {
-      isLangModalOpen.value = false;
-      if (cart?.value) await clear(cart);
-      await change({store});
-    };
+      isLangModalOpen.value = false
+      if (cart?.value) { await clear(cart) }
+      await change({ store })
+    }
 
-    const isStoreSelected = (store) => selectedStore.value?.id === store.id;
-    const getStoreLocale = (store) => store?.languages[0] ?? defaultLocale;
+    const isStoreSelected = store => selectedStore.value?.id === store.id
+    const getStoreLocale = store => store?.languages[0] ?? defaultLocale
 
     return {
       load,
@@ -117,9 +118,9 @@ export default {
       locale,
       defaultLocale,
       isLangModalOpen
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

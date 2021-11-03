@@ -1,0 +1,45 @@
+:root {
+  // font-family
+  --font-family--primary: "Montserrat", sans-serif;
+  --font-family--secondary: "Montserrat", sans-serif;
+  //font-weight
+  --font-weight--light: 300;
+  --font-weight--normal: 400; // regular
+  --font-weight--medium: 500;
+
+
+  --font-weight--semibold: 600;
+  --font-weight--bold: 700;
+  // font-size
+  --font-size--xs: 0.875rem; // 14px
+  --font-size--sm: 1rem; // 16px
+  --font-size--base: 1.125rem; // 18px
+  --font-size--md: 1.5rem; // 24px
+  --font-size--lg: 1.75rem; // 28px
+  --font-size--xl: 2.25rem; // 36px
+  --font-size--xxl: 2.625rem; // 42px
+  --font-size--xxxl: 3.625rem; // 58px
+  // line-height
+  --line-height--xs: 1.375rem; // 22px;
+  --line-height--sm: 1.625rem; // 26px;
+  --line-height--base: 2rem; // 32px
+  --line-height--lg: 2.25rem; // 36px
+  --line-height--xl: 2.625rem; // 42px
+  --line-height--xxl: 3rem; // 48px
+  --line-height-xxxl: 4.25rem; // 68px
+  // heading font-size
+  --h1-font-size: 1.5rem; //24px
+  --h2-font-size: 1.5rem; //24px
+  --h3-font-size: var(--font-size--lg); //18px
+  --h4-font-size: var(--font-size--lg); //18px
+  --h5-font-size: var(--font-size--base); //16px
+  --h6-font-size: var(--font-size--base); //16px
+  @include for-desktop {
+    --h1-font-size: var(--font-size--xxl);
+    --h2-font-size: var(--font-size--xl);
+    --h3-font-size: var(--font-size--lg);
+    --h4-font-size: var(--font-size--md);
+    --h5-font-size: var(--font-size--base);
+    --h6-font-size: var(--font-size--sm);
+  }
+}

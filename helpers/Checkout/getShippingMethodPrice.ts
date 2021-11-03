@@ -1,3 +1,4 @@
+// used in CartPreview.vue , VsfShippingProvider.vue, Payment.vue
 import { ShippingMethod } from '@vue-storefront/commercetools-api';
 
 export default (shippingMethod: ShippingMethod, total: number) => {

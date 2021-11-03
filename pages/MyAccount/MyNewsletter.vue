@@ -5,7 +5,9 @@
         {{ $t('Set up newsletter') }}
       </p>
       <div class="form">
-        <p class="form__title">{{ $t('Sections that interest you') }}</p>
+        <p class="form__title">
+          {{ $t('Sections that interest you') }}
+        </p>
         <div class="form__checkbox-group">
           <SfCheckbox
             v-model="newsletter"
@@ -26,18 +28,24 @@
             class="form__element"
           />
         </div>
-        <SfButton class="form__button">{{ $t('Save changes') }}</SfButton>
+        <SfButton class="form__button">
+          {{ $t('Save changes') }}
+        </SfButton>
       </div>
       <p class="notice">
-        {{ $t('Read and understand') }} <SfLink class="notice__link" href="#">{{ $t('Privacy') }}</SfLink> and
-        <SfLink class="notice__link" href="#">{{ $t('Cookies Policy') }}</SfLink> {{ $t('Commercial information') }}
+        {{ $t('Read and understand') }} <SfLink class="notice__link" href="#">
+          {{ $t('Privacy') }}
+        </SfLink> and
+        <SfLink class="notice__link" href="#">
+          {{ $t('Cookies Policy') }}
+        </SfLink> {{ $t('Commercial information') }}
       </p>
     </SfTab>
   </SfTabs>
 </template>
 
 <script>
-import { SfTabs, SfCheckbox, SfButton, SfLink } from '@storefront-ui/vue';
+import { SfTabs, SfCheckbox, SfButton, SfLink } from '@storefront-ui/vue'
 export default {
   name: 'MyNewsletter',
   components: {
@@ -46,10 +54,10 @@ export default {
     SfButton,
     SfLink
   },
-  data() {
-    return { newsletter: [] };
+  data () {
+    return { newsletter: [] }
   }
-};
+}
 </script>
 
 <style lang='scss' scoped>

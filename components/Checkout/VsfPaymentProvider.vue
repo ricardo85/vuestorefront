@@ -5,13 +5,13 @@
     </p>
 
     <SfRadio
-      v-e2e="'payment-method'"
       v-for="method in shippingMethods"
       :key="method.value"
+      v-e2e="'payment-method'"
       :label="method.label"
       :value="method.value"
       :description="method.description"
-      :selected ="selectedMethod"
+      :selected="selectedMethod"
       name="shippingMethod"
       class="form__radio shipping"
       @input="selectMethod(method.value)"
@@ -24,8 +24,8 @@
 </template>
 
 <script>
-import { SfButton, SfRadio } from '@storefront-ui/vue';
-import { ref } from '@vue/composition-api';
+import { SfButton, SfRadio } from '@storefront-ui/vue'
+import { ref } from '@vue/composition-api'
 
 const SHIPPING_METHODS = [
   { label: 'Visa Debit', value: 'visa_debit' },
@@ -33,7 +33,7 @@ const SHIPPING_METHODS = [
   { label: 'VisaElectron', value: 'visa_electron' },
   { label: 'Cash on delivery', value: 'cash' },
   { label: 'Check', value: 'check' }
-];
+]
 
 export default {
   name: 'VsfPaymentProvider',
@@ -43,21 +43,21 @@ export default {
     SfRadio
   },
 
-  setup(props, { emit }) {
-    const selectedMethod = ref(null);
+  setup (props, { emit }) {
+    const selectedMethod = ref(null)
 
     const selectMethod = (method) => {
-      selectedMethod.value = method;
-      emit('status');
-    };
+      selectedMethod.value = method
+      emit('status')
+    }
 
     return {
       shippingMethods: SHIPPING_METHODS,
       selectedMethod,
       selectMethod
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

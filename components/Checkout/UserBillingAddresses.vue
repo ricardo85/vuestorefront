@@ -2,8 +2,8 @@
   <div>
     <SfAddressPicker
       :selected="String(currentAddressId)"
-      @change="setCurrentAddress($event)"
       class="billing__addresses"
+      @change="setCurrentAddress($event)"
     >
       <SfAddress
         v-for="billingAddress in billingAddresses"
@@ -11,28 +11,22 @@
         :name="String(userBillingGetters.getId(billingAddress))"
         class="billing__address"
       >
-        <span
-          >{{ userBillingGetters.getFirstName(billingAddress) }} {{ userBillingGetters.getLastName(billingAddress) }}</span
-        >
-        <span
-          >{{ userBillingGetters.getStreetName(billingAddress) }}
-          {{ userBillingGetters.getApartmentNumber(billingAddress) }}</span
-        >
+        <span>{{ userBillingGetters.getFirstName(billingAddress) }} {{ userBillingGetters.getLastName(billingAddress) }}</span>
+        <span>{{ userBillingGetters.getStreetName(billingAddress) }}
+          {{ userBillingGetters.getApartmentNumber(billingAddress) }}</span>
         <span>{{ userBillingGetters.getPostCode(billingAddress) }}</span>
-        <span
-          >{{ userBillingGetters.getCity(billingAddress)
-          }}{{ userBillingGetters.getProvince(billingAddress) ? `, ${userBillingGetters.getProvince(billingAddress)}` : '' }}</span
-        >
-        <span>{{ userBillingGetters.getCountry(billingAddress)}}</span>
+        <span>{{ userBillingGetters.getCity(billingAddress)
+        }}{{ userBillingGetters.getProvince(billingAddress) ? `, ${userBillingGetters.getProvince(billingAddress)}` : '' }}</span>
+        <span>{{ userBillingGetters.getCountry(billingAddress) }}</span>
         <span>{{ userBillingGetters.getPhone(billingAddress) }}</span>
       </SfAddress>
     </SfAddressPicker>
     <SfCheckbox
       :selected="value"
-      @change="$emit('input', $event)"
       name="setAsDefault"
       label="Use this address as my default one."
       class="billing__setAsDefault"
+      @change="$emit('input', $event)"
     />
   </div>
 </template>
@@ -41,10 +35,14 @@
 import {
   SfCheckbox,
   SfAddressPicker
-} from '@storefront-ui/vue';
-import { useUserBilling, userBillingGetters } from '@vue-storefront/commercetools';
+} from '@storefront-ui/vue'
+import { useUserBilling, userBillingGetters } from '@vue-storefront/commercetools'
 export default {
   name: 'UserBillingAddresses',
+  components: {
+    SfCheckbox,
+    SfAddressPicker
+  },
   props: {
     currentAddressId: {
       type: String | Number,
@@ -55,26 +53,22 @@ export default {
       required: true
     }
   },
-  components: {
-    SfCheckbox,
-    SfAddressPicker
-  },
   setup (_, { emit }) {
-    const { billing: userBilling } = useUserBilling();
-    const setCurrentAddress = async addressId => {
-      const selectedAddress = userBillingGetters.getAddresses(userBilling.value, { id: addressId });
+    const { billing: userBilling } = useUserBilling()
+    const setCurrentAddress = async (addressId) => {
+      const selectedAddress = userBillingGetters.getAddresses(userBilling.value, { id: addressId })
       if (!selectedAddress || !selectedAddress.length) {
-        return;
+        return
       }
-      emit('setCurrentAddress', selectedAddress[0]);
-    };
+      emit('setCurrentAddress', selectedAddress[0])
+    }
     return {
       billingAddresses: userBillingGetters.getAddresses(userBilling.value),
       setCurrentAddress,
       userBillingGetters
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

@@ -7,32 +7,32 @@
     />
     <div class="form">
       <div class="form__radio-group payment__methods">
-          <SfRadio
-            v-e2e="'payment-method'"
-            v-for="method in paymentMethods"
-            :key="method.id"
-            :label="method.name"
-            :value="method.id"
-            :selected="selectedPaymentMethod.id"
-            @input="selectPaymentMethod(method)"
-            name="paymentMethod"
-            :description="method.description"
-            class="form__radio payment__method"
-          >
-            <template #label="{ label }">
-              <div class="sf-radio__label payment__label">
-                <div>{{ label }}</div>
+        <SfRadio
+          v-for="method in paymentMethods"
+          :key="method.id"
+          v-e2e="'payment-method'"
+          :label="method.name"
+          :value="method.id"
+          :selected="selectedPaymentMethod.id"
+          name="paymentMethod"
+          :description="method.description"
+          class="form__radio payment__method"
+          @input="selectPaymentMethod(method)"
+        >
+          <template #label="{ label }">
+            <div class="sf-radio__label payment__label">
+              <div>{{ label }}</div>
+            </div>
+          </template>
+          <template #description="{ description }">
+            <div class="sf-radio__description payment__description">
+              <div class="payment__info">
+                {{ description }}
               </div>
-            </template>
-            <template #description="{ description }">
-              <div class="sf-radio__description payment__description">
-                <div class="payment__info">
-                  {{ description }}
-                </div>
-              </div>
-            </template>
-          </SfRadio>
-        </div>
+            </div>
+          </template>
+        </SfRadio>
+      </div>
     </div>
   </div>
 </template>
@@ -42,9 +42,9 @@ import {
   SfHeading,
   SfButton,
   SfRadio
-} from '@storefront-ui/vue';
-import { ref } from '@vue/composition-api';
-import { usePaymentProviderMock } from '@/composables/usePaymentProviderMock';
+} from '@storefront-ui/vue'
+import { ref } from '@vue/composition-api'
+import { usePaymentProviderMock } from '@/composables/usePaymentProviderMock'
 
 export default {
   name: 'VsfPaymentProviderMock',
@@ -54,28 +54,28 @@ export default {
     SfRadio
   },
   setup () {
-    const { status } = usePaymentProviderMock();
-    const selectedPaymentMethod = ref({});
+    const { status } = usePaymentProviderMock()
+    const selectedPaymentMethod = ref({})
     const paymentMethods = ref([
       {
         id: 'mocked-id',
         name: 'Cash on delivery',
         description: ''
       }
-    ]);
+    ])
 
-    const selectPaymentMethod = paymentMethod => {
-      selectedPaymentMethod.value = paymentMethod;
-      status.value = true;
-    };
+    const selectPaymentMethod = (paymentMethod) => {
+      selectedPaymentMethod.value = paymentMethod
+      status.value = true
+    }
 
     return {
       paymentMethods,
       selectedPaymentMethod,
       selectPaymentMethod
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

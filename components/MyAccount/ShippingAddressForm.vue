@@ -7,8 +7,8 @@
     >
       <div class="form__horizontal">
         <ValidationProvider
-          rules="required|min:2"
           v-slot="{ errors }"
+          rules="required|min:2"
           class="form__element"
         >
           <SfInput
@@ -17,12 +17,12 @@
             :label="$t('First Name')"
             required
             :valid="!errors[0]"
-            :errorMessage="errors[0]"
+            :error-message="errors[0]"
           />
         </ValidationProvider>
         <ValidationProvider
-          rules="required|min:2"
           v-slot="{ errors }"
+          rules="required|min:2"
           class="form__element"
         >
           <SfInput
@@ -31,13 +31,13 @@
             :label="$t('Last Name')"
             required
             :valid="!errors[0]"
-            :errorMessage="errors[0]"
+            :error-message="errors[0]"
           />
         </ValidationProvider>
       </div>
       <ValidationProvider
-        rules="required"
         v-slot="{ errors }"
+        rules="required"
         class="form__element"
       >
         <SfInput
@@ -46,12 +46,12 @@
           :label="$t('Street Name')"
           required
           :valid="!errors[0]"
-          :errorMessage="errors[0]"
+          :error-message="errors[0]"
         />
       </ValidationProvider>
       <ValidationProvider
-        rules="required"
         v-slot="{ errors }"
+        rules="required"
         class="form__element"
       >
         <SfInput
@@ -64,8 +64,8 @@
       </ValidationProvider>
       <div class="form__horizontal">
         <ValidationProvider
-          rules="required"
           v-slot="{ errors }"
+          rules="required"
           class="form__element"
         >
           <SfInput
@@ -74,22 +74,22 @@
             :label="$t('City')"
             required
             :valid="!errors[0]"
-            :errorMessage="errors[0]"
+            :error-message="errors[0]"
           />
         </ValidationProvider>
         <ValidationProvider
-          :rules="validationRules.country"
           v-slot="{ errors }"
+          :rules="validationRules.country"
           class="form__element"
         >
           <SfSelect
-            class="form__select sf-select--underlined"
             v-model="form.country"
+            class="form__select sf-select--underlined"
             name="country"
             :label="$t('Country')"
             required
             :valid="!errors[0]"
-            :errorMessage="errors[0]"
+            :error-message="errors[0]"
           >
             <SfSelectOption
               v-for="{ name, label } in countries"
@@ -103,9 +103,9 @@
       </div>
       <div class="form__horizontal">
         <ValidationProvider
+          v-slot="{ errors }"
           name="state"
           :rules="validationRules.state"
-          v-slot="{ errors }"
           slim
         >
           <SfSelect
@@ -115,7 +115,7 @@
             class="form__element form__element--half form__element--half-even form__select sf-select--underlined"
             required
             :valid="!errors[0]"
-            :errorMessage="errors[0]"
+            :error-message="errors[0]"
             :disabled="!statesInSelectedCountry"
           >
             <SfSelectOption
@@ -128,8 +128,8 @@
           </SfSelect>
         </ValidationProvider>
         <ValidationProvider
-          rules="required|min:2"
           v-slot="{ errors }"
+          rules="required|min:2"
           class="form__element"
         >
           <SfInput
@@ -138,13 +138,13 @@
             :label="$t('Zip-code')"
             required
             :valid="!errors[0]"
-            :errorMessage="errors[0]"
+            :error-message="errors[0]"
           />
         </ValidationProvider>
       </div>
       <ValidationProvider
-        rules="required|phone"
         v-slot="{ errors }"
+        rules="required|phone"
         class="form__element"
       >
         <SfInput
@@ -153,7 +153,7 @@
           :label="$t('Phone number')"
           required
           :valid="!errors[0]"
-          :errorMessage="errors[0]"
+          :error-message="errors[0]"
         />
       </ValidationProvider>
       <SfCheckbox
@@ -175,27 +175,27 @@ import {
   SfButton,
   SfSelect,
   SfCheckbox
-} from '@storefront-ui/vue';
-import { required, min, oneOf } from 'vee-validate/dist/rules';
-import { ValidationProvider, ValidationObserver, extend } from 'vee-validate';
-import { reactive, computed, watch } from '@vue/composition-api';
-import { useVSFContext } from '@vue-storefront/core';
-import '@/helpers/validators/phone';
+} from '@storefront-ui/vue'
+import { required, min, oneOf } from 'vee-validate/dist/rules'
+import { ValidationProvider, ValidationObserver, extend } from 'vee-validate'
+import { reactive, computed, watch } from '@vue/composition-api'
+import { useVSFContext } from '@vue-storefront/core'
+import '@/helpers/validators/phone'
 
 extend('required', {
   ...required,
   message: 'This field is required'
-});
+})
 
 extend('min', {
   ...min,
   message: 'The field should have at least {length} characters'
-});
+})
 
 extend('oneOf', {
   ...oneOf,
   message: 'Invalid country'
-});
+})
 
 export default {
   name: 'ShippingAddressForm',
@@ -232,8 +232,8 @@ export default {
     }
   },
 
-  setup(props, { emit }) {
-    const { $ct: { config } } = useVSFContext();
+  setup (props, { emit }) {
+    const { $ct: { config } } = useVSFContext()
     const form = reactive({
       id: props.address.id,
       firstName: props.address.firstName,
@@ -246,7 +246,7 @@ export default {
       country: props.address.country,
       phone: props.address.phone,
       isDefault: props.address.isDefault
-    });
+    })
 
     const submitForm = () => {
       emit('submit', {
@@ -254,28 +254,28 @@ export default {
         onComplete: () => {},
         // TODO: Handle Error
         onError: () => {}
-      });
-    };
+      })
+    }
 
     const statesInSelectedCountry = computed(() => {
       if (!form.country) {
-        return null;
+        return null
       }
-      const selectedCountry = config.countries.find(country => country.name === form.country);
-      return selectedCountry && selectedCountry.states;
-    });
+      const selectedCountry = config.countries.find(country => country.name === form.country)
+      return selectedCountry && selectedCountry.states
+    })
 
     const validationRules = {
       contry: `required|oneOf:${config.countries.map(c => c.name).join(',')}`,
       state: !statesInSelectedCountry ? null : 'required|min:2'
-    };
+    }
 
-    watch(statesInSelectedCountry, statesInSelectedCountry => {
-      const countryHasStates = statesInSelectedCountry && statesInSelectedCountry.length;
+    watch(statesInSelectedCountry, (statesInSelectedCountry) => {
+      const countryHasStates = statesInSelectedCountry && statesInSelectedCountry.length
       if (!countryHasStates && form.state) {
-        form.state = null;
+        form.state = null
       }
-    });
+    })
 
     return {
       form,
@@ -283,9 +283,9 @@ export default {
       submitForm,
       countries: config.countries,
       statesInSelectedCountry
-    };
+    }
   }
-};
+}
 </script>
 
 <style lang='scss' scoped>
